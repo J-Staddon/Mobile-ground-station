@@ -17,11 +17,11 @@ public class RoverData {
     String ID;
 
     public void addData(String file) throws IOException, FileNotFoundException {
-        try (Scanner infile = new Scanner(new FileReader(file));) {
+        try (Scanner infile = new Scanner(file);) {
             infile.useDelimiter("\r?#|\r");
             char pointer = 'a';
             String data;
-            while(pointer != '\n') {
+            while(infile.hasNext()) {
                 data = infile.next();
                 pointer = data.charAt(0);
                 data = data.substring(1);

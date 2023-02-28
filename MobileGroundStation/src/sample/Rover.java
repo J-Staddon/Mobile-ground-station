@@ -16,12 +16,15 @@ public class Rover {
     RoverData[] roverData = new RoverData[100];
     int dataPosition = 0;
     String name;
+    String ID;
+    int positionInArray;
 
 
 
-    public void roverInsulator(String sentName, String fileName) {
+    public void roverInsulator(String sentName, String fileName, int position) {
         name = sentName;
         dataFile = fileName;
+        positionInArray = position;
     }
 
     public void loadValues(String line) throws IOException {
@@ -37,9 +40,9 @@ public class Rover {
         }
     }
 
-    public void updateValues() throws IOException {
+    public void updateValues(String newData) throws IOException {
         RoverData data = new RoverData();
-        data.addData("files/" + dataFile);
+        data.addData(newData);
 
         roverData[dataPosition] = data;
         if(dataPosition < 100) {
@@ -49,6 +52,8 @@ public class Rover {
             dataPosition = 0;
         }
     }
+
+
 
     public String getDataFile() {
         return dataFile;
@@ -80,5 +85,21 @@ public class Rover {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public int getPositionInArray() {
+        return positionInArray;
+    }
+
+    public void setPositionInArray(int positionInArray) {
+        this.positionInArray = positionInArray;
     }
 }
