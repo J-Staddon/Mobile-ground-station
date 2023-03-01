@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -30,13 +31,14 @@ public class ControllerNewRover {
     }
 
     public void create(ActionEvent actionEvent) throws IOException {
+        //if (fileTextField)
         if (!nameTextField.getText().trim().isEmpty() && !fileTextField.getText().trim().isEmpty()) {
             controller.roverMaker(nameTextField.getText(), fileTextField.getText());
             Node n = (Node) actionEvent.getSource();
             Stage stage = (Stage) n.getScene().getWindow();
             stage.close();
         }
-        System.out.println("lose");
+        //System.out.println("lose");
 
        // return null;
     }
@@ -50,9 +52,11 @@ public class ControllerNewRover {
     }
 
     public File fileBrowser(){
-        final DirectoryChooser directoryChooser = new DirectoryChooser();
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File("files"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
         Stage stage = (Stage) anchorPane.getScene().getWindow();
-        return directoryChooser.showDialog(stage);
+        return fileChooser.showOpenDialog(stage);
     }
 
     public void setParentController(Controller controller){
