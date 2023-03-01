@@ -33,15 +33,14 @@
 -->
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -54,34 +53,13 @@
    <children>
       <MenuBar VBox.vgrow="NEVER">
          <menus>
-            <Menu mnemonicParsing="false" text="File">
+            <Menu mnemonicParsing="false" text="Options">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#handleNewRoverButton" text="New" />
-                  <MenuItem mnemonicParsing="false" text="Open…" />
-                  <Menu mnemonicParsing="false" text="Open Recent" />
+                  <MenuItem mnemonicParsing="false" onAction="#makeNewRover" text="New Rover" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Close" />
-                  <MenuItem mnemonicParsing="false" text="Save" />
-                  <MenuItem mnemonicParsing="false" text="Save As…" />
-                  <MenuItem mnemonicParsing="false" text="Revert" />
+                  <MenuItem mnemonicParsing="false" text="Change Map" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Preferences…" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Quit" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Undo" />
-                  <MenuItem mnemonicParsing="false" text="Redo" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Cut" />
-                  <MenuItem mnemonicParsing="false" text="Copy" />
-                  <MenuItem mnemonicParsing="false" text="Paste" />
-                  <MenuItem mnemonicParsing="false" text="Delete" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Select All" />
-                  <MenuItem mnemonicParsing="false" text="Unselect All" />
+                  <MenuItem mnemonicParsing="false" text="Compare data" />
                </items>
             </Menu>
          </menus>
@@ -90,48 +68,28 @@
          <items>
             <AnchorPane>
                <children>
-                  <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Master" textAlignment="CENTER" wrapText="false">
+                  <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Rovers" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="14.0">
                      <font>
                         <Font size="18.0" fx:id="x1" />
                      </font>
-                     <textFill>
-                        <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
-                     </textFill>
                   </Label>
+                  <ListView fx:id="leftListView" layoutX="5.0" layoutY="54.0" prefHeight="484.0" prefWidth="209.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="54.0" />
                </children>
             </AnchorPane>
             <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
                <content>
                   <AnchorPane id="Content" fx:id="anchorPane" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0" styleClass="body">
                      <children>
-                        <ImageView fitHeight="551.0" fitWidth="643.0" layoutX="36.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <image>
-                              <Image url="@../../Images/testMap.jpg" />
-                           </image>
-                        </ImageView>
-                        <Button fx:id="rover1" contentDisplay="GRAPHIC_ONLY" layoutX="77.0" layoutY="147.0" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="40.0" prefWidth="50.0" text="Rover 1">
-                           <graphic>
-                              <ImageView fitHeight="28.0" fitWidth="33.0" preserveRatio="true">
-                                 <Image url="@../../Images/roverIcon.png" />
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="rover2" contentDisplay="GRAPHIC_ONLY" layoutX="224.0" layoutY="236.0" mnemonicParsing="false" onAction="#handleButtonClick" prefHeight="40.0" prefWidth="50.0" text="Rover 2">
-                           <graphic>
-                              <ImageView fitHeight="28.0" fitWidth="33.0" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../Images/roverIcon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
+                        <ImageView fx:id="mapImageView" fitHeight="551.0" fitWidth="643.0" layoutX="36.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <AnchorPane>
+            <AnchorPane fx:id="rightAnchorPane">
                <children>
-                  <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" textFill="$x2" wrapText="false" />
+                  <Label fx:id="dataLabel" alignment="TOP_LEFT" font="$x1" layoutX="-2.0" layoutY="14.0" prefHeight="27.0" prefWidth="119.0" style="&#10;" wrapText="false" AnchorPane.leftAnchor="14.0" />
+                  <ListView fx:id="rightListView" layoutX="94.0" prefHeight="484.0" prefWidth="119.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="94.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="54.0" />
+                  <ListView fx:id="rightListView1" layoutX="14.0" layoutY="54.0" prefHeight="484.0" prefWidth="85.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="54.0" />
                </children>
             </AnchorPane>
          </items>
