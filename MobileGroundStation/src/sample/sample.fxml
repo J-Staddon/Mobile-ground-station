@@ -41,7 +41,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -54,9 +53,9 @@
    <children>
       <MenuBar VBox.vgrow="NEVER">
          <menus>
-            <Menu mnemonicParsing="false" text="File">
+            <Menu mnemonicParsing="false" text="Options">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#handleNewRoverButton" text="New Rover" />
+                  <MenuItem mnemonicParsing="false" onAction="#makeNewRover" text="New Rover" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Change Map" />
                   <SeparatorMenuItem mnemonicParsing="false" />
@@ -69,7 +68,7 @@
          <items>
             <AnchorPane>
                <children>
-                  <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Rovers" textAlignment="CENTER" wrapText="false">
+                  <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Rovers" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="14.0">
                      <font>
                         <Font size="18.0" fx:id="x1" />
                      </font>
@@ -81,19 +80,16 @@
                <content>
                   <AnchorPane id="Content" fx:id="anchorPane" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0" styleClass="body">
                      <children>
-                        <ImageView fitHeight="551.0" fitWidth="643.0" layoutX="36.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <image>
-                              <Image url="@../../Images/testMap.jpg" />
-                           </image>
-                        </ImageView>
+                        <ImageView fx:id="mapImageView" fitHeight="551.0" fitWidth="643.0" layoutX="36.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <AnchorPane>
+            <AnchorPane fx:id="rightAnchorPane">
                <children>
-                  <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false" />
-                  <ListView fx:id="rightListView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="54.0" />
+                  <Label fx:id="dataLabel" alignment="TOP_LEFT" font="$x1" layoutX="-2.0" layoutY="14.0" prefHeight="27.0" prefWidth="119.0" style="&#10;" wrapText="false" AnchorPane.leftAnchor="14.0" />
+                  <ListView fx:id="rightListView" layoutX="94.0" prefHeight="484.0" prefWidth="119.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="94.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="54.0" />
+                  <ListView fx:id="rightListView1" layoutX="14.0" layoutY="54.0" prefHeight="484.0" prefWidth="85.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="54.0" />
                </children>
             </AnchorPane>
          </items>

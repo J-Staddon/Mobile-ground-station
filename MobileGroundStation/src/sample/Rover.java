@@ -14,7 +14,7 @@ public class Rover {
 
     String dataFile;
     RoverData[] roverData = new RoverData[100];
-    int dataPosition = 0;
+    int dataPosition = -1;
     String name;
     String ID;
     int positionInArray;
@@ -42,14 +42,15 @@ public class Rover {
 
     public void updateValues(String newData) throws IOException {
         RoverData data = new RoverData();
-        data.addData(newData);
+        boolean nullData = data.addData(newData);
 
-        roverData[dataPosition] = data;
-        if(dataPosition < 100) {
-            dataPosition++;
-        }
-        else{
-            dataPosition = 0;
+        if(!nullData) {
+            if (dataPosition < 100) {
+                dataPosition++;
+            } else {
+                dataPosition = 0;
+            }
+            roverData[dataPosition] = data;
         }
     }
 

@@ -1,10 +1,16 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,6 +18,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,6 +28,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Controller {
@@ -28,11 +37,18 @@ public class Controller {
     Image roverIcon = new Image(getClass().getResourceAsStream("images/roverIcon.png"));
     @FXML
     public AnchorPane anchorPane;
+    public AnchorPane rightAnchorPane;
     public ListView<Rover> leftListView;
-    public ListView<Rover> rightListView;
+    public ListView<String> rightListView;
+    public ListView<String> rightListView1;
+    public ImageView mapImageView;
+    //public TableView<Rover> rightTableView;
+    public Label dataLabel;
+   // public TableColumn<String, String> rightTableViewColumn1;
+   // public TableColumn<Rover, String> rightTableViewColumn2;
 
     //public String selectedRover;
-    public int selectedRoverPos;
+    public int selectedRoverPos = -1;
 
     int numOfRovers = 0;
 
@@ -45,6 +61,7 @@ public class Controller {
 
     public void initialize() throws IOException {
         loader();
+        mapImageView.setImage(map);
         //roverSelectPanel();
 
     }
@@ -78,17 +95,25 @@ public class Controller {
 
         //int num = Integer.parseInt(position);
         //roverButtons[num].setPadding(Insets.EMPTY);
-        System.out.println(selectedRoverPos);
-        //selectedRover = rovers[num].name;
-        roverButtons[selectedRoverPos].setBorder(Border.EMPTY);
+        if (selectedRoverPos != -1) {
+            System.out.println(selectedRoverPos);
+            //selectedRover = rovers[num].name;
+            roverButtons[selectedRoverPos].setBorder(Border.EMPTY);
+        }
         selectedRoverPos = position;
         roverButtons[selectedRoverPos].setLayoutX(roverButtons[selectedRoverPos].getLayoutX()-1);
-        roverButtons[selectedRoverPos].setBorder(Border.stroke(Paint.valueOf("#77C2BB")));
+        roverButtons[selectedRoverPos].setBorder(Border.stroke(Paint.valueOf("#000000")));
+        roverButtons[selectedRoverPos].toFront();
+        dataDisplayWindow(position);
     }
 
     public void handleNewRoverButton() throws IOException {
         roverMaker("bob", "rover3TestData");
         roverPositionUpdater(rovers[numOfRovers-1], rovers[numOfRovers-1].getDataFile(), false);
+    }
+
+    public void handleChangeMap(){
+
     }
 
     public void roverSelectPanel(int position){
@@ -103,39 +128,73 @@ public class Controller {
                    setText(empty ? null : rover.getName());
              }
         });
-
+        //Rover tempRover = new Rover();
         leftListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Rover>() {
+
             @Override
             public void changed(ObservableValue<? extends Rover> observableValue, Rover rover, Rover t1) {
-                int position = leftListView.getSelectionModel().getSelectedItem().positionInArray;
-                handleButtonClick(position);
+                if(selectedRoverPos != t1.positionInArray) {
+                    int position = leftListView.getSelectionModel().getSelectedItem().positionInArray;
+                    handleButtonClick(position);
+                }
+
             }
         });
     }
-/*
-    public void dataDisplayWindow(){
-        rightListView.getItems().addAll(rovers[roverPosition]);
-        rightListView.setCellFactory(lv -> new ListCell<Rover>(){
-            @Override
-            public void updateItem(Rover rover, boolean empty) {
-                super.updateItem(rover, empty) ;
-                setText(empty ? null : rover.getName());
-            }
-        });
 
-        rightListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Rover>() {
-            @Override
-            public void changed(ObservableValue<? extends Rover> observableValue, Rover rover, Rover t1) {
-                selectedRoverPos = rightListView.getSelectionModel().getSelectedItem().positionInArray;
-                handleButtonClick(selectedRoverPos);
-            }
-        });
+    public void dataDisplayWindow(int position){
+        Rover tempRover = rovers[position];
+        RoverData tempRoverData = tempRover.roverData[rovers[position].dataPosition];
+
+        rightListView1.getItems().clear();
+        rightListView1.getItems().addAll("ID", "Battery", "Date", "Time", "X", "Y");
+        for(int i = 0; i < tempRoverData.numSensors; i++){
+            rightListView1.getItems().add("Sensor " + (i+1));
+        }
+        rightListView1.setMouseTransparent(true);
+        rightListView1.setFocusTraversable(false);
+
+        char[] arr = tempRoverData.date.toCharArray();
+        char[] arr2 = {arr[6], arr[7], '/', arr[4], arr[5], '/', arr[0], arr[1], arr[2], arr[3]};
+        String date = String.valueOf(arr2);
+
+        arr = tempRoverData.time.toCharArray();
+        char[] arr3 = {arr[0], arr[1], ':', arr[2], arr[3], ':', arr[4], arr[5]};
+        String time = String.valueOf(arr3);
+
+        rightListView.getItems().clear();
+        rightListView.getItems().addAll(tempRoverData.ID,
+                tempRoverData.battery + "%", date, time,
+                String.valueOf(tempRoverData.locationX), String.valueOf(tempRoverData.locationY));
+
+        for(int i = 0; i < tempRoverData.numSensors; i++){
+            rightListView.getItems().add(tempRoverData.sensors[i]);
+        }
+
+        dataLabel.setText(tempRover.name);
+        rightAnchorPane.setVisible(true);
+        rightListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        rightListView1.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
-*/
 
 
-    public void deleteRover(){
 
+    public void makeNewRover() throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("newRoverMaker.fxml"));
+            Parent root = loader.load();
+            ControllerNewRover controllerNewRover = loader.getController();
+            controllerNewRover.setParentController(this);
+
+            Stage newRoverPage = new Stage();
+            newRoverPage.setTitle("Create rover");
+            newRoverPage.setScene(new Scene(root));
+
+            newRoverPage.show();
+        }
+        catch (Exception e){
+            System.out.println("New Rover Error");
+        }
     }
 
 
@@ -194,7 +253,7 @@ public class Controller {
             rover.updateValues(dataLine);
         }
         else{
-            String contents = new String(Files.readAllBytes(Paths.get("files/" + rover.getDataFile())));
+            String contents = new String(Files.readAllBytes(Paths.get(rover.getDataFile())));
             rover.updateValues(contents);
         }
     }
