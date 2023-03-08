@@ -33,6 +33,7 @@
 -->
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
@@ -41,6 +42,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -59,7 +61,7 @@
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#handleChangeMapButton" text="Change Map" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Compare data" onAction="#roverPositionUpdater" />
+                  <MenuItem mnemonicParsing="false" onAction="#roverPositionUpdater" text="Compare data" />
                </items>
             </Menu>
          </menus>
@@ -85,9 +87,9 @@
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <AnchorPane fx:id="rightAnchorPane" visible="false">
+            <AnchorPane fx:id="rightAnchorPane">
                <children>
-                  <Label fx:id="dataLabel" alignment="TOP_LEFT" font="$x1" layoutX="-2.0" layoutY="14.0" prefHeight="27.0" prefWidth="119.0" style="&#10;" wrapText="false" AnchorPane.leftAnchor="14.0" />
+                  <Label fx:id="dataLabel" alignment="TOP_LEFT" font="$x1" layoutX="-2.0" layoutY="14.0" prefHeight="27.0" prefWidth="119.0" style="&#10;" wrapText="false" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
                   <ListView fx:id="rightListView" layoutX="94.0" prefHeight="484.0" prefWidth="119.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="94.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="54.0" />
                   <ListView fx:id="rightListView1" layoutX="14.0" layoutY="54.0" prefHeight="484.0" prefWidth="85.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="54.0" />
                   <Label fx:id="missingDataLabel" layoutX="14.0" layoutY="63.0" prefHeight="37.0" prefWidth="134.0" text="Missing Data!" visible="false" AnchorPane.leftAnchor="14.0">
@@ -95,6 +97,15 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
+                  <Button onAction="#roverDeleter" layoutX="170.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="10.0">
+                     <graphic>
+                        <ImageView fitHeight="27.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../UIImages/edit-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
             </AnchorPane>
          </items>
