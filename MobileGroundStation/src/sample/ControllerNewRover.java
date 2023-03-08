@@ -21,6 +21,7 @@ public class ControllerNewRover {
     public Button createButton;
     public TextField fileTextField;
     public TextField nameTextField;
+    public TextField idTextField;
     public AnchorPane anchorPane;
 
     private Controller controller;
@@ -32,8 +33,8 @@ public class ControllerNewRover {
 
     public void create(ActionEvent actionEvent) throws IOException {
         //if (fileTextField)
-        if (!nameTextField.getText().trim().isEmpty() && !fileTextField.getText().trim().isEmpty()) {
-            controller.roverMaker(nameTextField.getText(), fileTextField.getText());
+        if (!nameTextField.getText().trim().isEmpty() && !fileTextField.getText().trim().isEmpty() && !idTextField.getText().trim().isEmpty()) {
+            controller.roverMaker(nameTextField.getText(), fileTextField.getText(), idTextField.getText());
             Node n = (Node) actionEvent.getSource();
             Stage stage = (Stage) n.getScene().getWindow();
             stage.close();

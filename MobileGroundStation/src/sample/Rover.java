@@ -17,14 +17,15 @@ public class Rover {
     int dataPosition = -1;
     String name;
     String ID;
-    int positionInArray;
+    //int positionInArray;
 
 
 
-    public void roverInsulator(String sentName, String fileName, int position) {
+    public void roverInsulator(String sentName, String fileName, String id) {
         name = sentName;
         dataFile = fileName;
-        positionInArray = position;
+        ID = id;
+        //positionInArray = position;
     }
 
     public void loadValues(String line) throws IOException {
@@ -96,11 +97,11 @@ public class Rover {
         this.ID = ID;
     }
 
-    public int getPositionInArray() {
-        return positionInArray;
-    }
-
-    public void setPositionInArray(int positionInArray) {
-        this.positionInArray = positionInArray;
-    }
+//    public int getPositionInArray() {
+//        return positionInArray;
+//    }
+//
+//    public void setPositionInArray(int positionInArray) {
+//        this.positionInArray = positionInArray;
+//    }
 }

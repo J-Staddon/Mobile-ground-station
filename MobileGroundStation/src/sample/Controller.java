@@ -66,8 +66,9 @@ public class Controller {
             int numOfRoversToAdd = infile.nextInt();
             for (int i = 0; numOfRoversToAdd > i; i++){
                 String name = infile.next();
+                String ID = infile.next();
                 String fileName = infile.next();
-                roverMaker(name, fileName);
+                roverMaker(name, fileName, ID);
                 for(int x = 0; x < 100; x++){
                     roverDataUpdater(rovers.get(numOfRovers-1), infile.next(), true);
                 }
@@ -82,10 +83,10 @@ public class Controller {
 
     }
 
-    private int findRoverPos(String name){
+    private int findRoverPos(String ID){
 
         for(int i = 0; 0 < rovers.size(); i++){
-            if (rovers.get(i).getName().equals(name)){
+            if (rovers.get(i).getID().equals(ID)){
                 return i;
             }
         }
@@ -163,7 +164,7 @@ public class Controller {
         leftListView.getSelectionModel().selectedItemProperty().addListener((observableValue, rover, target) -> {
             if (!deleting) {
                 if (currentView != target) {
-                    handleButtonClick(findRoverPos(leftListView.getSelectionModel().getSelectedItem().name));
+                    handleButtonClick(findRoverPos(leftListView.getSelectionModel().getSelectedItem().getID()));
                     currentView = leftListView.getSelectionModel().getSelectedItem();
                 }
             }
@@ -184,7 +185,6 @@ public class Controller {
                 rightListView1.getItems().add("Sensor " + (i + 1));
             }
 
-
             char[] arr = tempRoverData.date.toCharArray();
             char[] arr2 = {arr[6], arr[7], '/', arr[4], arr[5], '/', arr[0], arr[1], arr[2], arr[3]};
             String date = String.valueOf(arr2);
@@ -193,7 +193,7 @@ public class Controller {
             char[] arr3 = {arr[0], arr[1], ':', arr[2], arr[3], ':', arr[4], arr[5]};
             String time = String.valueOf(arr3);
 
-            rightListView.getItems().addAll(tempRoverData.ID,
+            rightListView.getItems().addAll(tempRover.ID,
                     tempRoverData.battery + "%", date, time, String.valueOf(tempRoverData.locationX), String.valueOf(tempRoverData.locationY));
 
             for (int i = 0; i < tempRoverData.numSensors; i++) {
@@ -217,11 +217,7 @@ public class Controller {
     public void roverDeleter(){
         deleting = true;
         int tempSelectedRoverPos = selectedRoverPos;
-        //try {
-            leftListView.getSelectionModel().clearSelection();
-        //}
-        //catch (Exception e){}
-
+        leftListView.getSelectionModel().clearSelection();
         rightAnchorPane.setVisible(false);
         leftListView.getItems().remove(tempSelectedRoverPos);
         anchorPane.getChildren().remove(roverButtons.get(tempSelectedRoverPos));
@@ -231,25 +227,23 @@ public class Controller {
     }
 
 
-    public void roverMaker(String name, String file) throws IOException {
+    public void roverMaker(String name, String file, String ID) throws IOException {
 
         Rover rover = new Rover();
-        int position = -1;
-        position = rovers.size();
         numOfRovers++;
-        rover.roverInsulator(name, file, position);
+        rover.roverInsulator(name, file, ID);
         roverDataUpdater(rover, file, false);
         rovers.add(rover);
-        roverButtonMaker(name, position);
-        roverSelectPanel(position);
+        roverButtonMaker(name, ID);
+        roverSelectPanel(findRoverPos(ID));
 
     }
 
-    private void roverButtonMaker(String name, int position){
+    private void roverButtonMaker(String name, String ID){
         Button button;
         button = new Button(name);
-        button.setId(Integer.toString(position));
-        button.setOnAction(e -> handleButtonClick(findRoverPos(button.getText())));
+        button.setId(ID);
+        button.setOnAction(e -> handleButtonClick(findRoverPos(button.getId())));
 
         button.setPrefWidth(50);
         button.setPrefHeight(50);
