@@ -17,7 +17,6 @@ import java.io.IOException;
 public class ControllerNewRover {
 
     @FXML
-    public Button fileButton;
     public Button createButton;
     public TextField fileTextField;
     public TextField nameTextField;
@@ -28,13 +27,13 @@ public class ControllerNewRover {
 
     public void initialize(){
 
-        fileButton.setOnAction(e -> findFile());
+      //  fileButton.setOnAction(e -> findFile());
     }
 
     public void create(ActionEvent actionEvent) throws IOException {
         //if (fileTextField)
-        if (!nameTextField.getText().trim().isEmpty() && !fileTextField.getText().trim().isEmpty() && !idTextField.getText().trim().isEmpty()) {
-            controller.roverMaker(nameTextField.getText(), fileTextField.getText(), idTextField.getText());
+        if (!nameTextField.getText().trim().isEmpty() && /*!fileTextField.getText().trim().isEmpty() &&*/ !idTextField.getText().trim().isEmpty()) {
+            controller.roverMaker(nameTextField.getText(), idTextField.getText());
             Node n = (Node) actionEvent.getSource();
             Stage stage = (Stage) n.getScene().getWindow();
             stage.close();
@@ -44,21 +43,21 @@ public class ControllerNewRover {
        // return null;
     }
 
-    @FXML
-    private void findFile(){
-        File file = fileBrowser();
-        if(file != null){
-            fileTextField.setText(file.getAbsolutePath());
-        }
-    }
-
-    public File fileBrowser(){
-        final FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File("files"));
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-        Stage stage = (Stage) anchorPane.getScene().getWindow();
-        return fileChooser.showOpenDialog(stage);
-    }
+//    @FXML
+//    private void findFile(){
+//        File file = fileBrowser();
+//        if(file != null){
+//            fileTextField.setText(file.getAbsolutePath());
+//        }
+//    }
+//
+//    public File fileBrowser(){
+//        final FileChooser fileChooser = new FileChooser();
+//        fileChooser.setInitialDirectory(new File("files"));
+//        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+//        Stage stage = (Stage) anchorPane.getScene().getWindow();
+//        return fileChooser.showOpenDialog(stage);
+//    }
 
     public void setParentController(Controller controller){
         this.controller = controller;

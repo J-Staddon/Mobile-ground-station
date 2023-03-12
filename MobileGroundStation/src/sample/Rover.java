@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Rover {
 
 
-    String dataFile;
+    //String dataFile;
     RoverData[] roverData = new RoverData[100];
     int dataPosition = -1;
     String name;
@@ -21,49 +21,36 @@ public class Rover {
 
 
 
-    public void roverInsulator(String sentName, String fileName, String id) {
+    public void roverInsulator(String sentName,/* String fileName, */String id) {
         name = sentName;
-        dataFile = fileName;
+        //dataFile = fileName;
         ID = id;
         //positionInArray = position;
     }
 
-    public void loadValues(String line) throws IOException {
-        RoverData data = new RoverData();
-        data.addData(line);
 
-        roverData[dataPosition] = data;
-        if(dataPosition < 100) {
-            dataPosition++;
-        }
-        else{
-            dataPosition = 0;
-        }
-    }
+    public void updateValues(RoverData data) throws IOException {
+//        boolean nullData = data.addData(newData);
 
-    public void updateValues(String newData) throws IOException {
-        RoverData data = new RoverData();
-        boolean nullData = data.addData(newData);
-
-        if(!nullData) {
-            if (dataPosition < 100) {
+        //if(!nullData) {
+            if (dataPosition < 99) {
                 dataPosition++;
             } else {
                 dataPosition = 0;
             }
             roverData[dataPosition] = data;
-        }
+        //}
     }
 
 
 
-    public String getDataFile() {
-        return dataFile;
-    }
+//    public String getDataFile() {
+//        return dataFile;
+//    }
 
-    public void setDataFile(String dataFile) {
-        this.dataFile = dataFile;
-    }
+//    public void setDataFile(String dataFile) {
+//        this.dataFile = dataFile;
+//    }
 
     public RoverData[] getRoverData() {
         return roverData;

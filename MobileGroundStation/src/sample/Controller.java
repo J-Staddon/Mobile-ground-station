@@ -56,6 +56,7 @@ public class Controller {
         System.out.println(map.getWidth());
         rightListView1.setMouseTransparent(true);
         rightListView1.setFocusTraversable(false);
+        roverDataUpdaterV2();
     }
 
     private void loader() throws IOException, FileNotFoundException {
@@ -68,9 +69,12 @@ public class Controller {
                 String name = infile.next();
                 String ID = infile.next();
                 String fileName = infile.next();
-                roverMaker(name, fileName, ID);
+                roverMaker(name, ID);
                 for(int x = 0; x < 100; x++){
-                    roverDataUpdater(rovers.get(numOfRovers-1), infile.next(), true);
+                    RoverData data = new RoverData();
+                    data.addData(infile.next());
+                    rovers.get(findRoverPos(ID)).updateValues(data);
+                   // roverDataUpdater(rovers.get(numOfRovers-1), infile.next(), true);
                 }
             }
         }
@@ -227,12 +231,13 @@ public class Controller {
     }
 
 
-    public void roverMaker(String name, String file, String ID) throws IOException {
+    public void roverMaker(String name, /*String file,*/ String ID) throws IOException {
 
         Rover rover = new Rover();
         numOfRovers++;
-        rover.roverInsulator(name, file, ID);
-        roverDataUpdater(rover, file, false);
+        rover.roverInsulator(name, ID);
+        //roverDataUpdater(rover, file, false);
+        //roverDataUpdaterV2();
         rovers.add(rover);
         roverButtonMaker(name, ID);
         roverSelectPanel(findRoverPos(ID));
@@ -262,20 +267,32 @@ public class Controller {
         roverButtons.add(button);
     }
 
-    public void roverDataUpdater(Rover rover, String dataLine, Boolean loadData) throws IOException {
-        if(loadData){
-            rover.updateValues(dataLine);
+    public void roverDataUpdaterV2() throws IOException {
+        RoverData data = new RoverData();
+        try (Scanner infile = new Scanner(new FileReader("files/rover1TestData.txt"));) {
+            data.addData(infile.nextLine());
+            int pos = findRoverPos(data.getID());
+            rovers.get(pos).updateValues(data);
         }
-        else{
-            try {
-                String contents = new String(Files.readAllBytes(Paths.get(rover.getDataFile())));
-                rover.updateValues(contents);
-            }
-            catch (Exception e){
-                System.out.println("File error");
-            }
+        catch (Exception e){
+            System.err.println("Update Rover Data Error");
         }
     }
+
+//    public void roverDataUpdater(Rover rover, String dataLine, Boolean loadData) throws IOException {
+//        if(loadData){
+//            rover.updateValues(dataLine);
+//        }
+//        else{
+//            try {
+//                String contents = new String(Files.readAllBytes(Paths.get(rover.getDataFile())));
+//                rover.updateValues(contents);
+//            }
+//            catch (Exception e){
+//                System.out.println("File error");
+//            }
+//        }
+//    }
 
     public void roverPositionUpdater(){
         double topLeftX = 52.408774623329776;
