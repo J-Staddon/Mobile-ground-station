@@ -23,7 +23,7 @@ public class Rover {
         }
     }
 
-    public void roverInsulator(String sentName,/* String fileName, */String id) {
+    public void roverInsulator(String sentName, String id) {
         name = sentName;
         ID = id;
     }
@@ -69,12 +69,4 @@ public class Rover {
     public void setID(String ID) {
         this.ID = ID;
     }
-
-//    public int getPositionInArray() {
-//        return positionInArray;
-//    }
-//
-//    public void setPositionInArray(int positionInArray) {
-//        this.positionInArray = positionInArray;
-//    }
 }

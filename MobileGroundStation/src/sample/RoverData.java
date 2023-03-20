@@ -12,8 +12,6 @@ public class RoverData {
     String time;
     double locationX;
     double locationY;
-    //int numSensors = 0;
-    //String[] sensors = new String[10];
     ArrayList<String> sensors = new ArrayList<>();
     String ID;
     String battery;
@@ -32,13 +30,11 @@ public class RoverData {
         pw.print('Y');
         pw.print(locationY);
         pw.print('#');
-
         for (String sensor : sensors){
             pw.print('S');
             pw.print(sensor);
             pw.print('#');
         }
-
         pw.print('I');
         pw.print(ID);
         pw.print('#');
@@ -69,9 +65,7 @@ public class RoverData {
                         locationY = Double.parseDouble(data);
                         break;
                     case 'S':
-                        //sensors[numSensors] = data;
                         sensors.add(data);
-//                        numSensors++;
                         break;
                     case 'I':
                         ID = data;
@@ -106,10 +100,6 @@ public class RoverData {
     public String getBattery() {
         return battery;
     }
-
-//    public int getNumSensors() {
-//        return numSensors;
-//    }
 
     public ArrayList<String> getSensors() {
         return sensors;

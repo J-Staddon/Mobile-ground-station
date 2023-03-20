@@ -61,7 +61,6 @@ public class Controller {
             for (int i = 0; numOfRoversToAdd > i; i++){
                 String name = infile.next();
                 String ID = infile.next();
-//                String fileName = infile.next();
                 roverMaker(name, ID);
                 for(int x = 0; x < 100; x++){
                     RoverData data = new RoverData();
@@ -80,18 +79,10 @@ public class Controller {
         try (FileWriter fw = new FileWriter(infileName);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter outfile = new PrintWriter(bw);) {
-
             outfile.println(rovers.size());
             for (Rover rover : rovers) {
                 rover.saver(outfile);
             }
-
-//            for(int i = 0; i < rovers.size(); i++) {
-//                outfile.println(rovers.get(i).getName());
-//                outfile.println(rovers.get(i).getID());
-//                //outfile.print(rovers.get);
-//            }
-
         }
     }
 
@@ -112,7 +103,6 @@ public class Controller {
             roverButtons.get(selectedRoverPos).setBorder(Border.EMPTY);
         }
         selectedRoverPos = position;
-        //roverButtons.get(selectedRoverPos).setLayoutX(roverButtons.get(selectedRoverPos).getLayoutX()-1);
         roverButtons.get(selectedRoverPos).setBorder(Border.stroke(Paint.valueOf("#000000")));
         roverButtons.get(selectedRoverPos).toFront();
         dataDisplayWindow(selectedRoverPos);
@@ -144,13 +134,8 @@ public class Controller {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
             Stage stage = (Stage) anchorPane.getScene().getWindow();
             File file = fileChooser.showOpenDialog(stage);
-            //String foundImage = .toString();
-            //map = new Image(getClass().getResourceAsStream(foundImage));
             map = new Image(file.toURI().toString());
             setMap();
-
-            //System.out.println(mapImageView.get);
-            //System.out.println(tempImage.getWidth());
         }
         catch (Exception e){
             System.err.println("Map Error");
@@ -162,9 +147,6 @@ public class Controller {
         System.out.println(map.getHeight());
         System.out.println(map.getWidth());
         mapScale = 1;
-//        while ((map.getHeight()*mapScale) < 500 && (map.getWidth()*mapScale) < 500){
-//            mapScale++;
-//        }
         mapImageView.setFitHeight(map.getHeight()*mapScale);
         mapImageView.setFitWidth(map.getWidth()*mapScale);
     }
