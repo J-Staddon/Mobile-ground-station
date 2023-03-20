@@ -1,8 +1,7 @@
 package sample;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class RoverData {
@@ -11,12 +10,37 @@ public class RoverData {
     String time;
     double locationX;
     double locationY;
-    String battery;
-    int numSensors = 0;
-    String[] sensors = new String[10];
+    //int numSensors = 0;
+    //String[] sensors = new String[10];
+    ArrayList<String> sensors = new ArrayList<String>();
     String ID;
+    String battery;
 
-    public boolean addData(String file) throws IOException, FileNotFoundException {
+
+    public void saver(PrintWriter pw){
+        pw.print('D');
+        pw.print(date);
+        pw.print('#');
+        pw.print('T');
+        pw.print(time);
+        pw.print('#');
+        pw.print('X');
+        pw.print(locationX);
+        pw.print('#');
+        pw.print('Y');
+        pw.print(locationY);
+        pw.print('#');
+
+
+
+        pw.print('I');
+        pw.print(ID);
+        pw.print('#');
+        pw.print('I');
+        pw.print(battery);
+    }
+
+    public boolean addData(String file){
         try (Scanner infile = new Scanner(file);) {
             infile.useDelimiter("\r?#|\r");
             char pointer = 'a';
@@ -39,8 +63,9 @@ public class RoverData {
                         locationY = Double.parseDouble(data);
                         break;
                     case 'S':
-                        sensors[numSensors] = data;
-                        numSensors++;
+                        //sensors[numSensors] = data;
+                        sensors.add(data);
+//                        numSensors++;
                         break;
                     case 'I':
                         ID = data;
@@ -76,11 +101,11 @@ public class RoverData {
         return battery;
     }
 
-    public int getNumSensors() {
-        return numSensors;
-    }
+//    public int getNumSensors() {
+//        return numSensors;
+//    }
 
-    public String[] getSensors() {
+    public ArrayList<String> getSensors() {
         return sensors;
     }
 

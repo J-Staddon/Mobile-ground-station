@@ -1,12 +1,12 @@
 package sample;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -15,14 +15,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -41,22 +34,22 @@ public class Controller {
     public Label missingDataLabel;
 
     public int selectedRoverPos = -1;
-    int numOfRovers = 0;
+    //int numOfRovers = 0;
     String infileName = "files/saveData.txt";
     public boolean deleting = false;
     public Rover currentView;
     ArrayList<Rover> rovers = new ArrayList<Rover>();
     ArrayList<Button> roverButtons = new ArrayList<Button>();
+    public float mapScale = 1;
 
 
     public void initialize() throws IOException {
         loader();
-        mapImageView.setImage(map);
-        System.out.println(map.getHeight());
-        System.out.println(map.getWidth());
+        setMap();
         rightListView1.setMouseTransparent(true);
         rightListView1.setFocusTraversable(false);
         roverDataUpdaterV2();
+        roverPositionUpdater();
     }
 
     private void loader() throws IOException, FileNotFoundException {
@@ -68,23 +61,38 @@ public class Controller {
             for (int i = 0; numOfRoversToAdd > i; i++){
                 String name = infile.next();
                 String ID = infile.next();
-                String fileName = infile.next();
+//                String fileName = infile.next();
                 roverMaker(name, ID);
                 for(int x = 0; x < 100; x++){
                     RoverData data = new RoverData();
-                    data.addData(infile.next());
-                    rovers.get(findRoverPos(ID)).updateValues(data);
-                   // roverDataUpdater(rovers.get(numOfRovers-1), infile.next(), true);
+                    if (!data.addData(infile.next())) {
+                        rovers.get(findRoverPos(ID)).updateValues(data);
+                    }
                 }
             }
         }
         catch(Exception e){
-            System.out.println("Error");
+            System.err.println("Load Error");
         }
     }
 
-    private void saver(){
+    public void saver() throws IOException {
+        try (FileWriter fw = new FileWriter(infileName);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter outfile = new PrintWriter(bw);) {
 
+            outfile.println(rovers.size());
+            for (Rover rover : rovers) {
+                rover.saver(outfile);
+            }
+
+//            for(int i = 0; i < rovers.size(); i++) {
+//                outfile.println(rovers.get(i).getName());
+//                outfile.println(rovers.get(i).getID());
+//                //outfile.print(rovers.get);
+//            }
+
+        }
     }
 
     private int findRoverPos(String ID){
@@ -104,7 +112,7 @@ public class Controller {
             roverButtons.get(selectedRoverPos).setBorder(Border.EMPTY);
         }
         selectedRoverPos = position;
-        roverButtons.get(selectedRoverPos).setLayoutX(roverButtons.get(selectedRoverPos).getLayoutX()-1);
+        //roverButtons.get(selectedRoverPos).setLayoutX(roverButtons.get(selectedRoverPos).getLayoutX()-1);
         roverButtons.get(selectedRoverPos).setBorder(Border.stroke(Paint.valueOf("#000000")));
         roverButtons.get(selectedRoverPos).toFront();
         dataDisplayWindow(selectedRoverPos);
@@ -112,7 +120,7 @@ public class Controller {
 
     public void handleNewRoverButton() throws IOException {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("newRoverMaker.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleNewRover.fxml"));
             Parent root = loader.load();
             ControllerNewRover controllerNewRover = loader.getController();
             controllerNewRover.setParentController(this);
@@ -126,7 +134,7 @@ public class Controller {
             newRoverPage.show();
         }
         catch (Exception e){
-            System.out.println("New Rover Error");
+            System.err.println("New Rover Error");
         }
     }
 
@@ -139,8 +147,7 @@ public class Controller {
             //String foundImage = .toString();
             //map = new Image(getClass().getResourceAsStream(foundImage));
             map = new Image(file.toURI().toString());
-            mapImageView.setImage(map);
-
+            setMap();
 
             //System.out.println(mapImageView.get);
             //System.out.println(tempImage.getWidth());
@@ -148,6 +155,52 @@ public class Controller {
         catch (Exception e){
             System.err.println("Map Error");
         }
+    }
+
+    public void setMap(){
+        mapImageView.setImage(map);
+        System.out.println(map.getHeight());
+        System.out.println(map.getWidth());
+        mapScale = 1;
+//        while ((map.getHeight()*mapScale) < 500 && (map.getWidth()*mapScale) < 500){
+//            mapScale++;
+//        }
+        mapImageView.setFitHeight(map.getHeight()*mapScale);
+        mapImageView.setFitWidth(map.getWidth()*mapScale);
+    }
+
+    public void handleZoomIn(){
+        if(mapScale < 0.5f) {
+            mapScale = mapScale + 0.1f;
+            mapImageView.setFitHeight(map.getHeight() * mapScale);
+            mapImageView.setFitWidth(map.getWidth() * mapScale);
+        }
+        else if(mapScale < 5) {
+            mapScale = mapScale + 0.5f;
+            mapImageView.setFitHeight(map.getHeight() * mapScale);
+            mapImageView.setFitWidth(map.getWidth() * mapScale);
+        }
+        else{
+            System.out.println("Max zoom reached");
+        }
+        roverPositionUpdater();
+    }
+
+    public void handleZoomOut(){
+        if(mapScale > 0.5f) {
+            mapScale = mapScale - 0.5f;
+            mapImageView.setFitHeight(map.getHeight() * mapScale);
+            mapImageView.setFitWidth(map.getWidth() * mapScale);
+        }
+        else if(mapScale > 0.2f) {
+            mapScale = mapScale - 0.1f;
+            mapImageView.setFitHeight(map.getHeight() * mapScale);
+            mapImageView.setFitWidth(map.getWidth() * mapScale);
+        }
+        else{
+            System.out.println("Minimum zoom reached");
+        }
+        roverPositionUpdater();
     }
 
     public void handleEditButton(){
@@ -185,7 +238,7 @@ public class Controller {
             rightListView1.setVisible(true);
             RoverData tempRoverData = tempRover.roverData[rovers.get(position).dataPosition];
             rightListView1.getItems().addAll("ID", "Battery", "Date", "Time", "X", "Y");
-            for (int i = 0; i < tempRoverData.numSensors; i++) {
+            for (int i = 0; i < tempRoverData.sensors.size(); i++) {
                 rightListView1.getItems().add("Sensor " + (i + 1));
             }
 
@@ -200,12 +253,12 @@ public class Controller {
             rightListView.getItems().addAll(tempRover.ID,
                     tempRoverData.battery + "%", date, time, String.valueOf(tempRoverData.locationX), String.valueOf(tempRoverData.locationY));
 
-            for (int i = 0; i < tempRoverData.numSensors; i++) {
-                rightListView.getItems().add(tempRoverData.sensors[i]);
+            for (int i = 0; i < tempRoverData.sensors.size(); i++) {
+                rightListView.getItems().add(tempRoverData.sensors.get(i));
             }
         }
         catch (Exception e){
-            System.out.println("Rover Data Error");
+            System.err.println("Rover Display Data Error");
             rightListView.setVisible(false);
             rightListView1.setVisible(false);
             missingDataLabel.setVisible(true);
@@ -234,7 +287,7 @@ public class Controller {
     public void roverMaker(String name, /*String file,*/ String ID) throws IOException {
 
         Rover rover = new Rover();
-        numOfRovers++;
+        //numOfRovers++;
         rover.roverInsulator(name, ID);
         //roverDataUpdater(rover, file, false);
         //roverDataUpdaterV2();
@@ -279,42 +332,52 @@ public class Controller {
         }
     }
 
-//    public void roverDataUpdater(Rover rover, String dataLine, Boolean loadData) throws IOException {
-//        if(loadData){
-//            rover.updateValues(dataLine);
-//        }
-//        else{
-//            try {
-//                String contents = new String(Files.readAllBytes(Paths.get(rover.getDataFile())));
-//                rover.updateValues(contents);
-//            }
-//            catch (Exception e){
-//                System.out.println("File error");
-//            }
-//        }
-//    }
 
-    public void roverPositionUpdater(){
-        double topLeftX = 52.408774623329776;
-        double topLeftY = -4.0501845529945575;
-        double bottomRightX = 52.40623515020268;
-        double bottomRightY = -4.044841592659181;
-        //double roverX = rovers[0].roverData[rovers[0].dataPosition].locationX;
-       // double roverY = rovers[0].roverData[rovers[0].dataPosition].locationY;
+    public void roverPositionUpdater() {
+
+        for (int i = 0; i < rovers.size(); i++) {
+            double topLeftX = 52.408774623329776;
+            double topLeftY = -4.0501845529945575;
+            double bottomRightX = 52.40623515020268;
+            double bottomRightY = -4.044841592659181;
+            try {
+                double roverX = rovers.get(i).roverData[rovers.get(i).dataPosition].locationX;
+                double roverY = rovers.get(i).roverData[rovers.get(i).dataPosition].locationY;
 
 
-        double mapX = mapImageView.getFitWidth();
-        double mapY = mapImageView.getFitHeight();
+                double diff;
+                double roverPos;
+                if (topLeftX > bottomRightX) {
+                    diff = topLeftX - bottomRightX;
+                    roverPos = topLeftX - roverX;
+                } else {
+                    diff = bottomRightX - topLeftX;
+                    roverPos = bottomRightX - roverX;
+                }
 
-        double latLeft = (topLeftX * mapX)/360;
-        double logLeft = (topLeftY * mapY)/180;
-        double latRight = (bottomRightX * mapX)/360;
-        double logRight = (bottomRightY * mapY)/180;
-        System.out.println(latRight);
-        System.out.println(logRight);
-     //   roverButtons[0].setLayoutX(latRight);
-     //   roverButtons[0].setLayoutY(logRight);
+                double mapX = map.getWidth();
 
+                double scale = mapX / diff;
+                roverButtons.get(i).setLayoutX(((roverPos * scale) * mapScale) - 25);
+
+
+                if (topLeftY > bottomRightY) {
+                    diff = topLeftY - bottomRightY;
+                    roverPos = topLeftY - roverY;
+                } else {
+                    diff = bottomRightY - topLeftY;
+                    roverPos = bottomRightY - roverY;
+                }
+
+                double mapY = map.getHeight();
+
+                scale = mapY / diff;
+                roverButtons.get(i).setLayoutY(((roverPos * scale) * mapScale) - 25);
+            }
+            catch (Exception e){
+                System.err.println("No location found for " + rovers.get(i).getName());
+            }
+        }
     }
 }
 

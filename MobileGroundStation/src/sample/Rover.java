@@ -1,56 +1,37 @@
 package sample;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.PrintWriter;
 
 public class Rover {
 
-
-    //String dataFile;
     RoverData[] roverData = new RoverData[100];
     int dataPosition = -1;
     String name;
     String ID;
-    //int positionInArray;
 
 
+    public void saver(PrintWriter pw){
+        pw.println(name);
+        pw.println(ID);
+        for (RoverData roverData : roverData) {
+            roverData.saver(pw);
+        }
+    }
 
     public void roverInsulator(String sentName,/* String fileName, */String id) {
         name = sentName;
-        //dataFile = fileName;
         ID = id;
-        //positionInArray = position;
     }
 
-
-    public void updateValues(RoverData data) throws IOException {
-//        boolean nullData = data.addData(newData);
-
-        //if(!nullData) {
-            if (dataPosition < 99) {
-                dataPosition++;
-            } else {
-                dataPosition = 0;
-            }
-            roverData[dataPosition] = data;
-        //}
+    public void updateValues(RoverData data){
+        if (dataPosition < 99) {
+            dataPosition++;
+        } else {
+            dataPosition = 0;
+        }
+        roverData[dataPosition] = data;
     }
 
-
-
-//    public String getDataFile() {
-//        return dataFile;
-//    }
-
-//    public void setDataFile(String dataFile) {
-//        this.dataFile = dataFile;
-//    }
 
     public RoverData[] getRoverData() {
         return roverData;

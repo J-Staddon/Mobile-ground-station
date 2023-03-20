@@ -68,7 +68,7 @@
       </MenuBar>
       <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <items>
-            <AnchorPane>
+            <AnchorPane maxWidth="-Infinity" prefWidth="220.0">
                <children>
                   <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Rovers" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="14.0">
                      <font>
@@ -87,7 +87,7 @@
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <AnchorPane fx:id="rightAnchorPane">
+            <AnchorPane fx:id="rightAnchorPane" maxWidth="240.0" minWidth="240.0" visible="false">
                <children>
                   <Label fx:id="dataLabel" alignment="TOP_LEFT" font="$x1" layoutX="-2.0" layoutY="14.0" prefHeight="27.0" prefWidth="119.0" style="&#10;" wrapText="false" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
                   <ListView fx:id="rightListView" layoutX="94.0" prefHeight="484.0" prefWidth="119.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="94.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="54.0" />
@@ -97,7 +97,7 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Button onAction="#roverDeleter" layoutX="170.0" layoutY="10.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="10.0">
+                  <Button layoutX="170.0" layoutY="10.0" mnemonicParsing="false" onAction="#roverDeleter" prefHeight="35.0" prefWidth="35.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="10.0">
                      <graphic>
                         <ImageView fitHeight="27.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -122,6 +122,8 @@
             </Label>
             <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
             <Label font="$x3" maxWidth="-1.0" text="Right status" textFill="$x4" HBox.hgrow="NEVER" />
+            <Button mnemonicParsing="false" onAction="#handleZoomOut" prefHeight="25.0" prefWidth="24.0" text="-" />
+            <Button mnemonicParsing="false" onAction="#handleZoomIn" text="+" />
          </children>
          <padding>
             <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
