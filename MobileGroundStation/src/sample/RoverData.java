@@ -1,5 +1,7 @@
 package sample;
 
+//import sun.management.Sensor;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,7 +14,7 @@ public class RoverData {
     double locationY;
     //int numSensors = 0;
     //String[] sensors = new String[10];
-    ArrayList<String> sensors = new ArrayList<String>();
+    ArrayList<String> sensors = new ArrayList<>();
     String ID;
     String battery;
 
@@ -31,13 +33,17 @@ public class RoverData {
         pw.print(locationY);
         pw.print('#');
 
-
+        for (String sensor : sensors){
+            pw.print('S');
+            pw.print(sensor);
+            pw.print('#');
+        }
 
         pw.print('I');
         pw.print(ID);
         pw.print('#');
-        pw.print('I');
-        pw.print(battery);
+        pw.print('B');
+        pw.println(battery);
     }
 
     public boolean addData(String file){

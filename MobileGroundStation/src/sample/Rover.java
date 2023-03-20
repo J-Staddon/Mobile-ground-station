@@ -14,7 +14,12 @@ public class Rover {
         pw.println(name);
         pw.println(ID);
         for (RoverData roverData : roverData) {
-            roverData.saver(pw);
+            if(roverData != null) {
+                roverData.saver(pw);
+            }
+            else{
+                pw.println("missing");
+            }
         }
     }
 

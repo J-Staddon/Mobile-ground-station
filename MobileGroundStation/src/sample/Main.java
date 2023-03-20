@@ -13,11 +13,9 @@ import java.io.IOException;
 
 public class Main extends Application {
 
-
     public static void main(String[] args) {
         launch(args);
     }
-
 
     public void close(Stage stage, Controller controller) throws IOException {
         ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.YES);
@@ -30,10 +28,10 @@ public class Main extends Application {
         alert.setContentText("Do you want to save before exiting?");
 
         if (alert.showAndWait().orElse(yes) == yes){
-           // controller.saver();
+            controller.saver();
             System.out.println("Data has been saved");
-            stage.close();
         }
+        stage.close();
     }
 
 
@@ -42,7 +40,6 @@ public class Main extends Application {
 //        Receiver receiver = new Receiver();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
         Parent root = loader.load();
-//        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         Controller controller = loader.getController();
         primaryStage.setTitle("Mobile Ground Station");
         primaryStage.setScene(new Scene(root, 1080, 720));
