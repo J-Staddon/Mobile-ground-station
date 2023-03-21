@@ -99,7 +99,7 @@ public class Controller {
     public void handleButtonClick(int position){
 
         if (selectedRoverPos < rovers.size() && selectedRoverPos != -1) {
-            System.out.println(selectedRoverPos);
+            //System.out.println(selectedRoverPos);
             roverButtons.get(selectedRoverPos).setBorder(Border.EMPTY);
         }
         selectedRoverPos = position;
