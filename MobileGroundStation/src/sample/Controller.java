@@ -34,6 +34,7 @@ public class Controller {
     public Label missingDataLabel;
 
     public int selectedRoverPos = -1;
+    //int numOfRovers = 0;
     String infileName = "files/saveData.txt";
     public boolean deleting = false;
     public Rover currentView;
@@ -98,7 +99,7 @@ public class Controller {
     public void handleButtonClick(int position){
 
         if (selectedRoverPos < rovers.size() && selectedRoverPos != -1) {
-            System.out.println(selectedRoverPos);
+            //System.out.println(selectedRoverPos);
             roverButtons.get(selectedRoverPos).setBorder(Border.EMPTY);
         }
         selectedRoverPos = position;
@@ -265,7 +266,7 @@ public class Controller {
     }
 
 
-    public void roverMaker(String name, String ID) throws IOException {
+    public void roverMaker(String name, /*String file,*/ String ID) throws IOException {
 
         Rover rover = new Rover();
         //numOfRovers++;

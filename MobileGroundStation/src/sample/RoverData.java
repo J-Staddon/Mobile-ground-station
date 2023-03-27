@@ -45,7 +45,7 @@ public class RoverData {
     public boolean addData(String file){
         try (Scanner infile = new Scanner(file);) {
             infile.useDelimiter("\r?#|\r");
-            char pointer = 'a';
+            char pointer;
             String data;
             while(infile.hasNext()) {
                 data = infile.next();
