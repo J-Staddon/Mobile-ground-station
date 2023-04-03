@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -33,6 +35,9 @@ public class Controller {
     public Label dataLabel;
     public Label missingDataLabel;
 
+    private StringProperty valueProperty = new SimpleStringProperty("");
+
+
     public int selectedRoverPos = -1;
     //int numOfRovers = 0;
     String infileName = "files/saveData.txt";
@@ -42,14 +47,20 @@ public class Controller {
     ArrayList<Button> roverButtons = new ArrayList<Button>();
     public float mapScale = 1;
 
+    public StringProperty valueProperty() { return this.valueProperty; }
+
 
     public void initialize() throws IOException {
         loader();
         setMap();
-        rightListView1.setMouseTransparent(true);
-        rightListView1.setFocusTraversable(false);
-        roverDataUpdaterV2();
-        roverPositionUpdater();
+        allRoverPositionUpdater();
+        valueProperty.addListener((observable, oldValue, newValue) -> {
+            System.out.println("Data: " + newValue);
+            if(newValue != null){
+                try {roverDataUpdater(newValue);}
+                catch (IOException e) {throw new RuntimeException(e);}
+            }
+        });
     }
 
     private void loader() throws IOException, FileNotFoundException {
@@ -99,7 +110,6 @@ public class Controller {
     public void handleButtonClick(int position){
 
         if (selectedRoverPos < rovers.size() && selectedRoverPos != -1) {
-            //System.out.println(selectedRoverPos);
             roverButtons.get(selectedRoverPos).setBorder(Border.EMPTY);
         }
         selectedRoverPos = position;
@@ -165,7 +175,7 @@ public class Controller {
         else{
             System.out.println("Max zoom reached");
         }
-        roverPositionUpdater();
+        allRoverPositionUpdater();
     }
 
     public void handleZoomOut(){
@@ -182,7 +192,7 @@ public class Controller {
         else{
             System.out.println("Minimum zoom reached");
         }
-        roverPositionUpdater();
+        allRoverPositionUpdater();
     }
 
     public void handleEditButton(){
@@ -302,12 +312,14 @@ public class Controller {
         roverButtons.add(button);
     }
 
-    public void roverDataUpdaterV2() throws IOException {
-        RoverData data = new RoverData();
+    public void roverDataUpdater(String data) throws IOException {
+        RoverData roverData = new RoverData();
         try (Scanner infile = new Scanner(new FileReader("files/rover1TestData.txt"));) {
-            data.addData(infile.nextLine());
-            int pos = findRoverPos(data.getID());
-            rovers.get(pos).updateValues(data);
+            roverData.addData(data);
+            //roverData.addData(infile.nextLine());
+            int pos = findRoverPos(roverData.getID());
+            rovers.get(pos).updateValues(roverData);
+            roverPositionUpdater(pos);
         }
         catch (Exception e){
             System.err.println("Update Rover Data Error");
@@ -315,16 +327,21 @@ public class Controller {
     }
 
 
-    public void roverPositionUpdater() {
+    public void allRoverPositionUpdater(){
+        for(int i = 0; i < rovers.size(); i++){
+            roverPositionUpdater(i);
+        }
+    }
 
-        for (int i = 0; i < rovers.size(); i++) {
+    public void roverPositionUpdater(int pos) {
+
             double topLeftX = 52.408774623329776;
             double topLeftY = -4.0501845529945575;
             double bottomRightX = 52.40623515020268;
             double bottomRightY = -4.044841592659181;
             try {
-                double roverX = rovers.get(i).roverData[rovers.get(i).dataPosition].locationX;
-                double roverY = rovers.get(i).roverData[rovers.get(i).dataPosition].locationY;
+                double roverX = rovers.get(pos).roverData[rovers.get(pos).dataPosition].locationX;
+                double roverY = rovers.get(pos).roverData[rovers.get(pos).dataPosition].locationY;
 
 
                 double diff;
@@ -340,7 +357,7 @@ public class Controller {
                 double mapX = map.getWidth();
 
                 double scale = mapX / diff;
-                roverButtons.get(i).setLayoutX(((roverPos * scale) * mapScale) - 25);
+                roverButtons.get(pos).setLayoutX(((roverPos * scale) * mapScale) - 25);
 
 
                 if (topLeftY > bottomRightY) {
@@ -354,12 +371,12 @@ public class Controller {
                 double mapY = map.getHeight();
 
                 scale = mapY / diff;
-                roverButtons.get(i).setLayoutY(((roverPos * scale) * mapScale) - 25);
+                roverButtons.get(pos).setLayoutY(((roverPos * scale) * mapScale) - 25);
             }
             catch (Exception e){
-                System.err.println("No location found for " + rovers.get(i).getName());
+                System.err.println("No location found for " + rovers.get(pos).getName());
             }
-        }
+
     }
 }
 

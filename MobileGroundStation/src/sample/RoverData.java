@@ -42,8 +42,8 @@ public class RoverData {
         pw.println(battery);
     }
 
-    public boolean addData(String file){
-        try (Scanner infile = new Scanner(file);) {
+    public boolean addData(String receivedData){
+        try (Scanner infile = new Scanner(receivedData);) {
             infile.useDelimiter("\r?#|\r");
             char pointer;
             String data;
