@@ -28,7 +28,7 @@ class DataReceiver extends Task<String> {
             datasoc.receive(dpac);
             System.out.println("Data Received");
             String strn = new String(dpac.getData(), 0, dpac.getLength());
-            //System.out.println(strn);
+            System.out.println("Data: " + strn);
             datasoc.close();
             return strn;
         }

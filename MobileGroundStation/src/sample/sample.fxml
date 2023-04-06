@@ -34,6 +34,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
@@ -48,7 +49,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
@@ -89,9 +89,9 @@
             </ScrollPane>
             <AnchorPane fx:id="rightAnchorPane" maxWidth="240.0" minWidth="240.0" visible="false">
                <children>
-                  <Label fx:id="dataLabel" alignment="TOP_LEFT" font="$x1" layoutX="-2.0" layoutY="14.0" prefHeight="27.0" prefWidth="119.0" style="&#10;" wrapText="false" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
-                  <ListView fx:id="rightListView" layoutX="94.0" prefHeight="484.0" prefWidth="119.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="94.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="54.0" />
-                  <ListView fx:id="rightListView1" mouseTransparent="true" focusTraversable="false" layoutX="14.0" layoutY="54.0" prefHeight="484.0" prefWidth="85.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="54.0" />
+                  <Label fx:id="dataLabel" alignment="TOP_LEFT" font="$x1" layoutX="-2.0" layoutY="14.0" prefHeight="27.0" prefWidth="119.0" style="&#10;" text="Rover name" wrapText="false" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                  <ListView fx:id="rightListView" layoutX="94.0" layoutY="76.0" prefHeight="373.0" prefWidth="138.0" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="94.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="76.0" />
+                  <ListView fx:id="rightListView1" focusTraversable="false" layoutX="8.0" layoutY="76.0" mouseTransparent="true" prefHeight="373.0" prefWidth="85.0" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="76.0" />
                   <Label fx:id="missingDataLabel" layoutX="14.0" layoutY="63.0" prefHeight="37.0" prefWidth="134.0" text="Missing Data!" visible="false" AnchorPane.leftAnchor="14.0">
                      <font>
                         <Font size="20.0" />
@@ -106,22 +106,45 @@
                         </ImageView>
                      </graphic>
                   </Button>
+                  <Button fx:id="backDataButton" layoutX="8.0" layoutY="507.0" mnemonicParsing="false" onAction="#handleBackDataButton" prefHeight="27.0" prefWidth="37.0" text="&lt;-" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" />
+                  <Button fx:id="forwardDataButton" layoutX="206.0" layoutY="512.0" mnemonicParsing="false" onAction="#handleForwardDataButton" prefHeight="25.0" prefWidth="37.0" text="-&gt;" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                  <Label fx:id="timeLabel" alignment="CENTER" layoutX="41.0" layoutY="509.6666666666667" prefHeight="27.0" prefWidth="159.0" style="&#10;" text="14:09:24" textAlignment="CENTER" wrapText="false" AnchorPane.bottomAnchor="3.0">
+                     <font>
+                        <Font size="18.0" fx:id="x11" />
+                     </font>
+                  </Label>
+                  <CheckBox fx:id="showLatestDataLabel" layoutX="5.0" layoutY="454.0" mnemonicParsing="false" onAction="#handleShowLatestData" text="Show latest data" AnchorPane.bottomAnchor="68.66666666666669" AnchorPane.leftAnchor="5.0" />
+                  <Label fx:id="dateLabel" alignment="CENTER" layoutX="41.0" layoutY="488.6666666666667" prefHeight="27.0" prefWidth="159.0" style="&#10;" text="01/01/2000" textAlignment="CENTER" wrapText="false" AnchorPane.bottomAnchor="24.0">
+                     <font>
+                        <Font size="14.0" fx:id="x111" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="batteryImageView" fitHeight="23.0" fitWidth="50.0" layoutX="177.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/battery%20icon.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="batteryLabel" alignment="TOP_LEFT" layoutX="182.0" layoutY="54.0" prefHeight="27.0" prefWidth="96.0" style="&#10;" text="100%" wrapText="false">
+                     <font>
+                        <Font name="System Bold" size="10.0" fx:id="x1111" />
+                     </font>
+                  </Label>
+                  <Label fx:id="IDLabel" alignment="TOP_LEFT" layoutX="16.0" layoutY="40.0" prefHeight="27.0" prefWidth="50.0" style="&#10;" text="0000" wrapText="false">
+                     <font>
+                        <Font size="14.0" fx:id="x1112" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </items>
       </SplitPane>
       <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
          <children>
-            <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
-               <font>
-                  <Font size="11.0" fx:id="x3" />
-               </font>
-               <textFill>
-                  <Color red="0.625" green="0.625" blue="0.625" fx:id="x4" />
-               </textFill>
-            </Label>
             <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-            <Label font="$x3" maxWidth="-1.0" text="Right status" textFill="$x4" HBox.hgrow="NEVER" />
+            <Label maxWidth="-1.0" text="Zoom" HBox.hgrow="NEVER">
+               <font>
+                  <Font name="System Bold" size="15.0" fx:id="x3" />
+               </font></Label>
             <Button mnemonicParsing="false" onAction="#handleZoomOut" prefHeight="25.0" prefWidth="24.0" text="-" />
             <Button mnemonicParsing="false" onAction="#handleZoomIn" text="+" />
          </children>

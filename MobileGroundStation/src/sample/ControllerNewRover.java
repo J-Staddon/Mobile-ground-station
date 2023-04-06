@@ -55,4 +55,8 @@ public class ControllerNewRover {
     public void setParentController(Controller controller){
         this.controller = controller;
     }
+
+    public void setIdTextField(TextField idTextField) {
+        this.idTextField = idTextField;
+    }
 }

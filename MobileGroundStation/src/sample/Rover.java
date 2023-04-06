@@ -28,13 +28,65 @@ public class Rover {
         ID = id;
     }
 
-    public void updateValues(RoverData data){
-        if (dataPosition < 99) {
-            dataPosition++;
-        } else {
+    public void updateValues(RoverData data) {
+        RoverData[] tempRoverData = new RoverData[100];
+        tempRoverData = roverData;
+        boolean dataPlaced = false;
+        boolean front = true;
+        int tempDataPosition = dataPosition;
+        int newTempDataPosition;
+        if (dataPosition == -1){
+            tempRoverData[0] = data;
             dataPosition = 0;
         }
-        roverData[dataPosition] = data;
+        else {
+            for (int i = 0; i < 100; i++) {
+                tempDataPosition = tempDataPosition - i;
+                newTempDataPosition = tempDataPosition + 1;
+
+                if (tempDataPosition < 0) {
+                    tempDataPosition = 99;
+                    newTempDataPosition = 0;
+                }
+                if (roverData[tempDataPosition] == null) {
+                    if (!dataPlaced){
+                        tempRoverData[newTempDataPosition] = data;
+                        dataPosition++;
+                    }
+                    break;
+                }
+
+                if (dataPlaced) {
+                    tempRoverData[tempDataPosition] = roverData[tempDataPosition];
+                }
+                else if (data.getDate().compareTo(roverData[tempDataPosition].getDate()) == 0){
+                    if (data.getTime().compareTo(roverData[tempDataPosition].getTime()) >= 0) { //If newData >= roverData
+                        tempRoverData[newTempDataPosition] = data;
+                        dataPosition++;
+                        dataPlaced = true;
+                        if (front){
+                            break;
+                        }
+                    }
+                    else {
+                        tempRoverData[newTempDataPosition] = roverData[tempDataPosition];
+                    }
+                }
+                else if (data.getDate().compareTo(roverData[tempDataPosition].getDate()) > 0) { //If newData > roverData
+                    tempRoverData[newTempDataPosition] = data;
+                    dataPosition++;
+                    dataPlaced = true;
+                    if (front){
+                        break;
+                    }
+                }
+                else {
+                    tempRoverData[newTempDataPosition] = roverData[tempDataPosition];
+                }
+                front = false;
+            }
+        }
+        roverData = tempRoverData;
     }
 
 
