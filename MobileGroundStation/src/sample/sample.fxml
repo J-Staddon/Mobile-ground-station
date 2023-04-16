@@ -141,10 +141,7 @@
       <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
          <children>
             <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-            <Label maxWidth="-1.0" text="Zoom" HBox.hgrow="NEVER">
-               <font>
-                  <Font name="System Bold" size="15.0" fx:id="x3" />
-               </font></Label>
+            <Label maxWidth="-1.0" text="Zoom" HBox.hgrow="NEVER" />
             <Button mnemonicParsing="false" onAction="#handleZoomOut" prefHeight="25.0" prefWidth="24.0" text="-" />
             <Button mnemonicParsing="false" onAction="#handleZoomIn" text="+" />
          </children>
