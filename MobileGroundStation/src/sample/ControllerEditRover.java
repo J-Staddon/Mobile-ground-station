@@ -11,10 +11,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class ControllerNewRover {
-
+public class ControllerEditRover {
     @FXML
-    public Button createButton;
+    public Button saveButton;
     public TextField nameTextField;
     public TextField idTextField;
     public Label errorMessage;
@@ -22,6 +21,7 @@ public class ControllerNewRover {
     private Controller controller;
 
     public void initialize(){
+
         idTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 idTextField.setText(newValue.replaceAll("[^\\d]", ""));
@@ -29,20 +29,23 @@ public class ControllerNewRover {
         });
     }
 
-    public void create(ActionEvent actionEvent) throws IOException {
+    public void save(ActionEvent actionEvent) throws IOException {
         if (!nameTextField.getText().trim().isEmpty() && !idTextField.getText().trim().isEmpty()) {
             if(nameTextField.getText().length() < 10) {
                 if(idTextField.getText().length() == 4) {
                     boolean IDinUse = false;
                     for (int i = 0; i < controller.rovers.size(); i++) {
+
                         if (controller.rovers.get(i).getID().equals(idTextField.getText())) {
-                            errorMessage.setText("ID already in use");
-                            IDinUse = true;
-                            break;
+                            if(!controller.rovers.get(i).getID().equals(controller.rovers.get(controller.selectedRoverPos).getID())){
+                                errorMessage.setText("ID already in use");
+                                IDinUse = true;
+                                break;
+                            }
                         }
                     }
-                    if (!IDinUse) {
-                        controller.roverMaker(nameTextField.getText(), idTextField.getText());
+                    if(!IDinUse) {
+                        controller.roverUpdater(nameTextField.getText(), idTextField.getText());
                         Node n = (Node) actionEvent.getSource();
                         Stage stage = (Stage) n.getScene().getWindow();
                         stage.close();
@@ -55,11 +58,14 @@ public class ControllerNewRover {
         else{errorMessage.setText("Both boxes require text");}
     }
 
-    public void setParentController(Controller controller){
-        this.controller = controller;
+    public void handleDeleteButton(ActionEvent actionEvent){
+        controller.roverDeleter(controller.selectedRoverPos);
+        Node n = (Node) actionEvent.getSource();
+        Stage stage = (Stage) n.getScene().getWindow();
+        stage.close();
     }
 
-    public void setIdTextField(TextField idTextField) {
-        this.idTextField = idTextField;
+    public void setParentController(Controller controller){
+        this.controller = controller;
     }
 }

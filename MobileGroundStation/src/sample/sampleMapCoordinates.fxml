@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="324.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ControllerMapCoordinates">
+   <children>
+      <Label alignment="CENTER" layoutX="7.0" layoutY="22.0" prefHeight="66.0" prefWidth="385.0" text="Map Coordinates" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="34.0" layoutY="119.0" prefHeight="31.0" prefWidth="148.0" text="Top left" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="218.0">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <TextField fx:id="TLX" layoutX="34.0" layoutY="150.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="218.0" />
+      <Button fx:id="ConfirmButton" layoutX="140.0" layoutY="251.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="97.0" text="Confirm" AnchorPane.leftAnchor="140.0" AnchorPane.rightAnchor="140.0">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Button>
+      <TextField fx:id="TLY" layoutX="34.0" layoutY="176.0" />
+      <Label alignment="CENTER" layoutX="14.0" layoutY="173.0" prefHeight="31.0" prefWidth="19.0" text="Y">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Label fx:id="errorMessage" alignment="CENTER" layoutX="7.0" layoutY="212.0" prefHeight="31.0" prefWidth="386.0" textFill="#ff1515" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="14.0" layoutY="147.0" prefHeight="31.0" prefWidth="19.0" text="X">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="237.0" layoutY="120.0" prefHeight="31.0" prefWidth="148.0" text="Bottom right">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <TextField fx:id="BRX" layoutX="237.0" layoutY="151.0" />
+      <TextField fx:id="BRY" layoutX="237.0" layoutY="177.0" />
+      <Label alignment="CENTER" layoutX="217.0" layoutY="174.0" prefHeight="31.0" prefWidth="19.0" text="Y">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="217.0" layoutY="148.0" prefHeight="31.0" prefWidth="19.0" text="X">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="8.0" layoutY="62.0" prefHeight="66.0" prefWidth="385.0" text="Please enter the GPS coordiantes of the map" textFill="#5e5e5e">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

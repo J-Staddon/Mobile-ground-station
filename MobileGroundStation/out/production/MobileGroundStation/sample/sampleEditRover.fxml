@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="324.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ControllerEditRover">
+   <children>
+      <Label alignment="CENTER" layoutX="7.0" layoutY="22.0" prefHeight="66.0" prefWidth="385.0" text="Edit Rover" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="7.0" layoutY="93.0" prefHeight="31.0" prefWidth="386.0" text="Name:" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <TextField fx:id="nameTextField" layoutX="126.0" layoutY="124.0" AnchorPane.leftAnchor="126.0" AnchorPane.rightAnchor="126.0" />
+      <Button fx:id="saveButton" layoutX="140.0" layoutY="251.0" mnemonicParsing="false" onAction="#save" prefHeight="39.0" prefWidth="97.0" text="Save" AnchorPane.leftAnchor="140.0" AnchorPane.rightAnchor="140.0">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Button>
+      <TextField fx:id="idTextField" layoutX="125.0" layoutY="180.0" />
+      <Label alignment="CENTER" layoutX="7.0" layoutY="149.0" prefHeight="25.0" prefWidth="385.0" text="ID:">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Label fx:id="errorMessage" alignment="CENTER" layoutX="7.0" layoutY="212.0" prefHeight="31.0" prefWidth="386.0" textFill="#ff1515" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Button layoutX="335.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleDeleteButton" prefHeight="45.0" prefWidth="45.0" />
+   </children>
+</AnchorPane>

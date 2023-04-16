@@ -2,6 +2,7 @@ package sample;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,8 +15,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -53,7 +56,8 @@ public class Controller {
     //int numOfRovers = 0;
     String infileName = "files/saveData.txt";
     public boolean deleting = false;
-    public boolean showLatestData = false;
+    public boolean showLatestData = true;
+    public boolean pause = false;
     public Rover currentView;
     ArrayList<Rover> rovers = new ArrayList<Rover>();
     ArrayList<Button> roverButtons = new ArrayList<Button>();
@@ -67,6 +71,8 @@ public class Controller {
         loader();
         setMap();
         allRoverPositionUpdater();
+        Line line = new Line(100, 10, 10, 1010);
+        anchorPane.getChildren().add(line);
         valueProperty.addListener((observable, oldValue, newValue) -> {
             if(newValue != null){
                 try {roverDataUpdater(newValue);}
@@ -128,49 +134,99 @@ public class Controller {
         return -1;
     }
 
-    public void handleButtonClick(int pos){
-        if (selectedRoverPos < rovers.size() && selectedRoverPos != -1) {
-            roverButtons.get(selectedRoverPos).setBorder(Border.EMPTY);
+    public void handleButtonClick(int pos) {
+        if (!pause) {
+            if (selectedRoverPos < rovers.size() && selectedRoverPos != -1) {
+                roverButtons.get(selectedRoverPos).setBorder(Border.EMPTY);
+            }
+            selectedRoverPos = pos;
+            selectedRoverDataPos = rovers.get(selectedRoverPos).dataPosition;
+            roverButtons.get(selectedRoverPos).setBorder(Border.stroke(Paint.valueOf("#000000")));
+            roverButtons.get(selectedRoverPos).toFront();
+            dataDisplayWindow(selectedRoverPos, rovers.get(selectedRoverPos).getDataPosition());
         }
-        selectedRoverPos = pos;
-        selectedRoverDataPos = rovers.get(selectedRoverPos).dataPosition;
-        roverButtons.get(selectedRoverPos).setBorder(Border.stroke(Paint.valueOf("#000000")));
-        roverButtons.get(selectedRoverPos).toFront();
-        dataDisplayWindow(selectedRoverPos, rovers.get(selectedRoverPos).getDataPosition());
     }
 
     public void handleNewRoverButton() throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleNewRover.fxml"));
-            Parent root = loader.load();
-            ControllerNewRover controllerNewRover = loader.getController();
-            controllerNewRover.setParentController(this);
-            controllerNewRover.idTextField.setText(foundID);
+        if (!pause) {
+            pause = true;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleNewRover.fxml"));
+                Parent root = loader.load();
+                ControllerNewRover controllerNewRover = loader.getController();
+                controllerNewRover.setParentController(this);
+                controllerNewRover.idTextField.setText(foundID);
 
-            Stage newRoverPage = new Stage();
-            newRoverPage.setTitle("Create rover");
-            newRoverPage.setScene(new Scene(root));
-            newRoverPage.setAlwaysOnTop(true);
-            newRoverPage.setResizable(false);
-            newRoverPage.showAndWait();
-            foundID = "";
+                Stage newRoverPage = new Stage();
+                newRoverPage.setTitle("Create rover");
+                newRoverPage.setScene(new Scene(root));
+                newRoverPage.setAlwaysOnTop(true);
+                newRoverPage.setResizable(false);
+                newRoverPage.showAndWait();
+                foundID = "";
+            } catch (Exception e) {
+                System.err.println("New Rover Error");
+            }
+            pause = false;
         }
-        catch (Exception e){
-            System.err.println("New Rover Error");
+    }
+
+    public void handleEditButton() {
+        if (!pause) {
+            pause = true;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleEditRover.fxml"));
+                Parent root = loader.load();
+                ControllerEditRover controllerEditRover = loader.getController();
+                controllerEditRover.setParentController(this);
+                controllerEditRover.nameTextField.setText(rovers.get(selectedRoverPos).name);
+                controllerEditRover.idTextField.setText(rovers.get(selectedRoverPos).ID);
+
+                Stage newRoverPage = new Stage();
+                newRoverPage.setTitle("Edit rover");
+                newRoverPage.setScene(new Scene(root));
+                newRoverPage.setAlwaysOnTop(true);
+                newRoverPage.setResizable(false);
+                newRoverPage.showAndWait();
+            } catch (Exception e) {
+                System.err.println("Edit Rover Error");
+            }
+            pause = false;
         }
     }
 
     public void handleChangeMapButton(){
-        final FileChooser fileChooser = new FileChooser();
-        try {
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-            Stage stage = (Stage) anchorPane.getScene().getWindow();
-            File file = fileChooser.showOpenDialog(stage);
-            map = new Image(file.toURI().toString());
-            setMap();
-        }
-        catch (Exception e){
-            System.err.println("Map Error");
+        if (!pause) {
+            final FileChooser fileChooser = new FileChooser();
+            try {
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+                Stage stage = (Stage) anchorPane.getScene().getWindow();
+                File file = fileChooser.showOpenDialog(stage);
+                map = new Image(file.toURI().toString());
+                setMap();
+            } catch (Exception e) {
+                System.err.println("Map Error");
+            }
+
+            pause = true;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleMapCoordinates.fxml"));
+                Parent root = loader.load();
+                ControllerMapCoordinates controllerMapCoordinates = loader.getController();
+                controllerMapCoordinates.setParentController(this);
+
+                Stage newRoverPage = new Stage();
+                newRoverPage.setTitle("Map Coordinates");
+                newRoverPage.setScene(new Scene(root));
+                newRoverPage.setAlwaysOnTop(true);
+                newRoverPage.setResizable(false);
+                newRoverPage.showAndWait();
+
+            } catch (Exception e) {
+                System.err.println("Map Coordinates Error");
+            }
+            pause = false;
+
         }
     }
 
@@ -259,10 +315,7 @@ public class Controller {
         }
     }
 
-    public void handleEditButton(){
-        int tempSelectedRoverPos = selectedRoverPos;
-        //rovers[tempSelectedRoverPos]
-    }
+
 
     public void roverSelectPanel(int position){
         leftListView.getItems().add(rovers.get(position));
@@ -277,8 +330,10 @@ public class Controller {
         leftListView.getSelectionModel().selectedItemProperty().addListener((observableValue, rover, target) -> {
             if (!deleting) {
                 if (currentView != target) {
-                    handleButtonClick(findRoverPos(leftListView.getSelectionModel().getSelectedItem().getID()));
-                    currentView = leftListView.getSelectionModel().getSelectedItem();
+                    if (!pause) {
+                        handleButtonClick(findRoverPos(leftListView.getSelectionModel().getSelectedItem().getID()));
+                        currentView = leftListView.getSelectionModel().getSelectedItem();
+                    }
                 }
             }
         });
@@ -324,7 +379,6 @@ public class Controller {
             for (int i = 0; i < tempRoverData.sensors.size(); i++) {
                 rightListView.getItems().add(tempRoverData.sensors.get(i));
             }
-            //numberLabel.setText();
         }
         catch (Exception e){
             System.err.println("Rover Display Data Error");
@@ -346,11 +400,8 @@ public class Controller {
         rightListView1.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
-
-
-    public void roverDeleter(){
+    public void roverDeleter(int tempSelectedRoverPos){
         deleting = true;
-        int tempSelectedRoverPos = selectedRoverPos;
         leftListView.getSelectionModel().clearSelection();
         rightAnchorPane.setVisible(false);
         leftListView.getItems().remove(tempSelectedRoverPos);
@@ -360,6 +411,14 @@ public class Controller {
         deleting = false;
     }
 
+    public void roverUpdater(String name, String ID){
+        rovers.get(selectedRoverPos).name = name;
+        rovers.get(selectedRoverPos).ID = ID;
+        roverButtons.get(selectedRoverPos).setId(ID);
+        dataDisplayWindow(selectedRoverPos, selectedRoverDataPos);
+        leftListView.refresh();
+
+    }
 
     public void roverMaker(String name, String ID) throws IOException {
 
@@ -375,7 +434,7 @@ public class Controller {
 
     private void roverButtonMaker(String name, String ID){
         Button button;
-        button = new Button(name);
+        button = new Button();
         button.setId(ID);
         button.setOnAction(e -> handleButtonClick(findRoverPos(button.getId())));
 
@@ -420,13 +479,16 @@ public class Controller {
                     ignoreIDList.add(roverData.getID());
                 }
 
-                }
+            }
             else {
 
                 if ((showLatestData && selectedRoverPos == pos) || rovers.get(pos).dataPosition == -1) {
                     rovers.get(pos).updateValues(roverData);
                     selectedRoverDataPos = rovers.get(pos).dataPosition;
                     dataDisplayWindow(pos, selectedRoverDataPos);
+                }
+                else{
+                    rovers.get(pos).updateValues(roverData);
                 }
                 roverPositionUpdater(pos);
             }

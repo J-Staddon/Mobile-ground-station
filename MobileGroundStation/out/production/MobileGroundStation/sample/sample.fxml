@@ -97,7 +97,7 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Button layoutX="170.0" layoutY="10.0" mnemonicParsing="false" onAction="#roverDeleter" prefHeight="35.0" prefWidth="35.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="10.0">
+                  <Button layoutX="170.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleEditButton" prefHeight="35.0" prefWidth="35.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="10.0">
                      <graphic>
                         <ImageView fitHeight="27.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -113,7 +113,7 @@
                         <Font size="18.0" fx:id="x11" />
                      </font>
                   </Label>
-                  <CheckBox fx:id="showLatestDataLabel" layoutX="5.0" layoutY="454.0" mnemonicParsing="false" onAction="#handleShowLatestData" text="Show latest data" AnchorPane.bottomAnchor="68.66666666666669" AnchorPane.leftAnchor="5.0" />
+                  <CheckBox fx:id="showLatestDataLabel" layoutX="5.0" layoutY="454.0" mnemonicParsing="false" onAction="#handleShowLatestData" selected="true" text="Show latest data" AnchorPane.bottomAnchor="68.66666666666669" AnchorPane.leftAnchor="5.0" />
                   <Label fx:id="dateLabel" alignment="CENTER" layoutX="41.0" layoutY="488.6666666666667" prefHeight="27.0" prefWidth="159.0" style="&#10;" text="01/01/2000" textAlignment="CENTER" wrapText="false" AnchorPane.bottomAnchor="24.0">
                      <font>
                         <Font size="14.0" fx:id="x111" />
