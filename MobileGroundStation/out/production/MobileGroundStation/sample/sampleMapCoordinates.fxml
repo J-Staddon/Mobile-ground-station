@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="324.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ControllerMapCoordinates">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="352.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ControllerMapCoordinates">
    <children>
       <Label alignment="CENTER" layoutX="7.0" layoutY="22.0" prefHeight="66.0" prefWidth="385.0" text="Map Coordinates" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0">
          <font>
@@ -19,7 +19,7 @@
          </font>
       </Label>
       <TextField fx:id="TLX" layoutX="34.0" layoutY="150.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="218.0" />
-      <Button fx:id="ConfirmButton" layoutX="140.0" layoutY="251.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="97.0" text="Confirm" AnchorPane.leftAnchor="140.0" AnchorPane.rightAnchor="140.0">
+      <Button fx:id="ConfirmButton" layoutX="141.0" layoutY="286.0" mnemonicParsing="false" onAction="#confirmButton" prefHeight="39.0" prefWidth="97.0" text="Confirm" AnchorPane.leftAnchor="141.0" AnchorPane.rightAnchor="139.0">
          <font>
             <Font size="21.0" />
          </font>
@@ -62,5 +62,10 @@
             <Font size="19.0" />
          </font>
       </Label>
+      <Button layoutX="111.0" layoutY="249.0" mnemonicParsing="false" onAction="#useCurrentCoordinates" prefHeight="30.0" prefWidth="178.0" text="Use current coordinates">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

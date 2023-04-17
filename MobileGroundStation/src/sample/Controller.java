@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Controller {
-    Image map = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
+    Image map;// = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
     Image roverIcon = new Image(getClass().getResourceAsStream("images/roverIcon.png"));
 
     @FXML
@@ -49,6 +49,10 @@ public class Controller {
 
     private StringProperty valueProperty = new SimpleStringProperty("");
 
+    double topLeftX;
+    double topLeftY;
+    double bottomRightX;
+    double bottomRightY;
 
     public int selectedRoverPos = -1;
     public int selectedRoverDataPos = -1;
@@ -69,7 +73,8 @@ public class Controller {
 
     public void initialize() throws IOException {
         loader();
-        setMap();
+//        setMap(52.408774623329776, -4.0501845529945575, 52.40623515020268, -4.044841592659181);
+        setMap(topLeftX, topLeftY, bottomRightX, bottomRightY);
         allRoverPositionUpdater();
         Line line = new Line(100, 10, 10, 1010);
         anchorPane.getChildren().add(line);
@@ -85,7 +90,15 @@ public class Controller {
         System.out.println(new File("saveData").getAbsolutePath());
         try (Scanner infile = new Scanner(new FileReader(infileName));) {
             infile.useDelimiter("\r?\n|\r");
-
+            try{
+                map = new Image(getClass().getResourceAsStream(infile.next()));
+            } catch (Exception e){
+                map = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
+            }
+            topLeftX = infile.nextDouble();
+            topLeftY = infile.nextDouble();
+            bottomRightX = infile.nextDouble();
+            bottomRightY = infile.nextDouble();
             int numOfRoversToAdd = infile.nextInt();
             for (int i = 0; numOfRoversToAdd > i; i++){
                 String name = infile.next();
@@ -203,7 +216,7 @@ public class Controller {
                 Stage stage = (Stage) anchorPane.getScene().getWindow();
                 File file = fileChooser.showOpenDialog(stage);
                 map = new Image(file.toURI().toString());
-                setMap();
+                //setMap();
             } catch (Exception e) {
                 System.err.println("Map Error");
             }
@@ -230,7 +243,11 @@ public class Controller {
         }
     }
 
-    public void setMap(){
+    public void setMap(double TLX, double TLY, double BRX, double BRY){
+        topLeftX = TLX;
+        topLeftY = TLY;
+        bottomRightX = BRX;
+        bottomRightY = BRY;
         mapImageView.setImage(map);
         System.out.println(map.getHeight());
         System.out.println(map.getWidth());
@@ -507,10 +524,7 @@ public class Controller {
 
     public void roverPositionUpdater(int pos) {
 
-            double topLeftX = 52.408774623329776;
-            double topLeftY = -4.0501845529945575;
-            double bottomRightX = 52.40623515020268;
-            double bottomRightY = -4.044841592659181;
+
             try {
                 double roverX = rovers.get(pos).roverData[rovers.get(pos).dataPosition].locationX;
                 double roverY = rovers.get(pos).roverData[rovers.get(pos).dataPosition].locationY;
