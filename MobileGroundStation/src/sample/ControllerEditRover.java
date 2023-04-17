@@ -3,12 +3,11 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Objects;
 
 
 public class ControllerEditRover {
@@ -58,11 +57,19 @@ public class ControllerEditRover {
         else{errorMessage.setText("Both boxes require text");}
     }
 
-    public void handleDeleteButton(ActionEvent actionEvent){
-        controller.roverDeleter(controller.selectedRoverPos);
+    public void handleDeleteButton(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Deleting Rover");
+        alert.setHeaderText("Deleting Rover");
+        alert.setContentText("Are you sure you want to delete this rover and all it's data?");
         Node n = (Node) actionEvent.getSource();
         Stage stage = (Stage) n.getScene().getWindow();
-        stage.close();
+        alert.initOwner(stage);
+        alert.showAndWait();
+        if (Objects.equals(alert.getResult().getText(), "OK")) {
+            controller.roverDeleter(controller.selectedRoverPos);
+            stage.close();
+        }
     }
 
     public void setParentController(Controller controller){

@@ -54,6 +54,8 @@ public class Controller {
     double bottomRightX;
     double bottomRightY;
 
+    String mapFileLocation;
+
     public int selectedRoverPos = -1;
     public int selectedRoverDataPos = -1;
     public String foundID = "";
@@ -73,9 +75,8 @@ public class Controller {
 
     public void initialize() throws IOException {
         loader();
-//        setMap(52.408774623329776, -4.0501845529945575, 52.40623515020268, -4.044841592659181);
         setMap(topLeftX, topLeftY, bottomRightX, bottomRightY);
-        allRoverPositionUpdater();
+        //allRoverPositionUpdater();
         Line line = new Line(100, 10, 10, 1010);
         anchorPane.getChildren().add(line);
         valueProperty.addListener((observable, oldValue, newValue) -> {
@@ -91,9 +92,11 @@ public class Controller {
         try (Scanner infile = new Scanner(new FileReader(infileName));) {
             infile.useDelimiter("\r?\n|\r");
             try{
-                map = new Image(getClass().getResourceAsStream(infile.next()));
+                mapFileLocation = infile.next();
+                map = new Image(mapFileLocation);
             } catch (Exception e){
                 map = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
+                System.err.println("Could not find map");
             }
             topLeftX = infile.nextDouble();
             topLeftY = infile.nextDouble();
@@ -121,6 +124,11 @@ public class Controller {
         try (FileWriter fw = new FileWriter(infileName);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter outfile = new PrintWriter(bw);) {
+            outfile.println(mapFileLocation);
+            outfile.println(topLeftX);
+            outfile.println(topLeftY);
+            outfile.println(bottomRightX);
+            outfile.println(bottomRightY);
             outfile.println(rovers.size());
             for (Rover rover : rovers) {
                 rover.saver(outfile);
@@ -210,35 +218,41 @@ public class Controller {
 
     public void handleChangeMapButton(){
         if (!pause) {
+            boolean closed = false;
             final FileChooser fileChooser = new FileChooser();
             try {
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
                 Stage stage = (Stage) anchorPane.getScene().getWindow();
                 File file = fileChooser.showOpenDialog(stage);
+                mapFileLocation = file.getPath();
                 map = new Image(file.toURI().toString());
-                //setMap();
+
+//                if (file != null){
+                pause = true;
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleMapCoordinates.fxml"));
+                    Parent root = loader.load();
+                    ControllerMapCoordinates controllerMapCoordinates = loader.getController();
+                    controllerMapCoordinates.setParentController(this);
+
+                    Stage newRoverPage = new Stage();
+                    newRoverPage.setTitle("Map Coordinates");
+                    newRoverPage.setScene(new Scene(root));
+                    newRoverPage.setAlwaysOnTop(true);
+                    newRoverPage.setResizable(false);
+                    newRoverPage.showAndWait();
+
+                } catch (Exception e) {
+                    System.err.println("Map Coordinates Error");
+                }
+                pause = false;
+
+
             } catch (Exception e) {
                 System.err.println("Map Error");
             }
 
-            pause = true;
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleMapCoordinates.fxml"));
-                Parent root = loader.load();
-                ControllerMapCoordinates controllerMapCoordinates = loader.getController();
-                controllerMapCoordinates.setParentController(this);
 
-                Stage newRoverPage = new Stage();
-                newRoverPage.setTitle("Map Coordinates");
-                newRoverPage.setScene(new Scene(root));
-                newRoverPage.setAlwaysOnTop(true);
-                newRoverPage.setResizable(false);
-                newRoverPage.showAndWait();
-
-            } catch (Exception e) {
-                System.err.println("Map Coordinates Error");
-            }
-            pause = false;
 
         }
     }

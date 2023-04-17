@@ -1,4 +1,4 @@
-images/testMap.jpg
+C:\Users\jayst\Pictures\Maps\map 3.png
 52.408774623329776
 -4.0501845529945575
 52.40623515020268
