@@ -61,7 +61,7 @@
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#handleChangeMapButton" text="Change Map" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Compare data" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleCompareDataButton" text="Compare data" />
                </items>
             </Menu>
          </menus>

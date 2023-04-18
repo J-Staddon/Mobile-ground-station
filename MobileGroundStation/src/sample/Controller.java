@@ -208,12 +208,12 @@ public class Controller {
                 controllerEditRover.nameTextField.setText(rovers.get(selectedRoverPos).name);
                 controllerEditRover.idTextField.setText(rovers.get(selectedRoverPos).ID);
 
-                Stage newRoverPage = new Stage();
-                newRoverPage.setTitle("Edit rover");
-                newRoverPage.setScene(new Scene(root));
-                newRoverPage.setAlwaysOnTop(true);
-                newRoverPage.setResizable(false);
-                newRoverPage.showAndWait();
+                Stage editRoverPage = new Stage();
+                editRoverPage.setTitle("Edit rover");
+                editRoverPage.setScene(new Scene(root));
+                editRoverPage.setAlwaysOnTop(true);
+                editRoverPage.setResizable(false);
+                editRoverPage.showAndWait();
             } catch (Exception e) {
                 System.err.println("Edit Rover Error");
             }
@@ -240,12 +240,12 @@ public class Controller {
                     ControllerMapCoordinates controllerMapCoordinates = loader.getController();
                     controllerMapCoordinates.setParentController(this);
 
-                    Stage newRoverPage = new Stage();
-                    newRoverPage.setTitle("Map Coordinates");
-                    newRoverPage.setScene(new Scene(root));
-                    newRoverPage.setAlwaysOnTop(true);
-                    newRoverPage.setResizable(false);
-                    newRoverPage.showAndWait();
+                    Stage changeMapPage = new Stage();
+                    changeMapPage.setTitle("Map Coordinates");
+                    changeMapPage.setScene(new Scene(root));
+                    changeMapPage.setAlwaysOnTop(true);
+                    changeMapPage.setResizable(false);
+                    changeMapPage.showAndWait();
 
                 } catch (Exception e) {
                     System.err.println("Map Coordinates Error");
@@ -259,6 +259,29 @@ public class Controller {
 
 
 
+        }
+    }
+
+    public void handleCompareDataButton() {
+        if (!pause) {
+            pause = true;
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleCompareData.fxml"));
+                Parent root = loader.load();
+                ControllerCompareData controllerCompareData = loader.getController();
+                controllerCompareData.setParentController(this);
+
+                Stage compareDataPage = new Stage();
+                compareDataPage.setTitle("Compare Data");
+                compareDataPage.setScene(new Scene(root));
+                compareDataPage.setAlwaysOnTop(true);
+                compareDataPage.setResizable(true);
+                compareDataPage.showAndWait();
+
+            } catch (Exception e) {
+                System.err.println("Compare Data Error");
+            }
+            pause = false;
         }
     }
 
