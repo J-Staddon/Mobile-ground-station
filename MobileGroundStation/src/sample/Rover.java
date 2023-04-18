@@ -33,7 +33,8 @@ public class Rover {
         tempRoverData = roverData;
         boolean dataPlaced = false;
         boolean front = true;
-        int tempDataPosition = dataPosition;
+        int dataPositionNum = dataPosition;
+        int tempDataPosition;
         int newTempDataPosition;
         if (dataPosition == -1){
             tempRoverData[0] = data;
@@ -41,13 +42,15 @@ public class Rover {
         }
         else {
             for (int i = 0; i < 100; i++) {
-                tempDataPosition = tempDataPosition - i;
+                tempDataPosition = dataPositionNum- i;
+//                tempDataPosition = tempDataPosition - i;
                 newTempDataPosition = tempDataPosition + 1;
 
-                if (tempDataPosition < 0) {
+                if (tempDataPosition < 0 || tempDataPosition == 99) {
                     tempDataPosition = 99;
                     newTempDataPosition = 0;
                 }
+
                 if (roverData[tempDataPosition] == null) {
                     if (!dataPlaced){
                         tempRoverData[newTempDataPosition] = data;
@@ -85,6 +88,9 @@ public class Rover {
                 }
                 front = false;
             }
+        }
+        if(dataPosition == 100){
+            dataPosition = 0;
         }
         roverData = tempRoverData;
     }

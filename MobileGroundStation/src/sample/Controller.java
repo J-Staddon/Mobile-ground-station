@@ -22,6 +22,7 @@ import javafx.stage.WindowEvent;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -56,6 +57,8 @@ public class Controller {
 
     String mapFileLocation;
 
+
+
     public int selectedRoverPos = -1;
     public int selectedRoverDataPos = -1;
     public String foundID = "";
@@ -68,6 +71,7 @@ public class Controller {
     ArrayList<Rover> rovers = new ArrayList<Rover>();
     ArrayList<Button> roverButtons = new ArrayList<Button>();
     ArrayList<String> ignoreIDList = new ArrayList<String>();
+    List<Line> lines = new ArrayList<>();
     public float mapScale = 1;
 
     public StringProperty valueProperty() { return this.valueProperty; }
@@ -77,8 +81,7 @@ public class Controller {
         loader();
         setMap(topLeftX, topLeftY, bottomRightX, bottomRightY);
         //allRoverPositionUpdater();
-        Line line = new Line(100, 10, 10, 1010);
-        anchorPane.getChildren().add(line);
+
         valueProperty.addListener((observable, oldValue, newValue) -> {
             if(newValue != null){
                 try {roverDataUpdater(newValue);}
@@ -96,7 +99,7 @@ public class Controller {
                 map = new Image(mapFileLocation);
             } catch (Exception e){
                 map = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
-                System.err.println("Could not find map");
+                System.err.println("Could not find a saved map");
             }
             topLeftX = infile.nextDouble();
             topLeftY = infile.nextDouble();
@@ -113,6 +116,7 @@ public class Controller {
                         rovers.get(findRoverPos(ID)).updateValues(data);
                     }
                 }
+                System.out.println("Hi");
             }
         }
         catch(Exception e){
@@ -164,6 +168,7 @@ public class Controller {
             selectedRoverDataPos = rovers.get(selectedRoverPos).dataPosition;
             roverButtons.get(selectedRoverPos).setBorder(Border.stroke(Paint.valueOf("#000000")));
             roverButtons.get(selectedRoverPos).toFront();
+            linePath(pos);
             dataDisplayWindow(selectedRoverPos, rovers.get(selectedRoverPos).getDataPosition());
         }
     }
@@ -313,27 +318,30 @@ public class Controller {
             } else {
                 tempSelectedRoverDataPos--;
             }
-            if (rovers.get(selectedRoverPos).roverData[tempSelectedRoverDataPos] != null) {
-                selectedRoverDataPos--;
+            if (rovers.get(selectedRoverPos).roverData[tempSelectedRoverDataPos] != null && rovers.get(selectedRoverPos).dataPosition != tempSelectedRoverDataPos) {
+                selectedRoverDataPos = tempSelectedRoverDataPos;
                 dataDisplayWindow(selectedRoverPos, selectedRoverDataPos);
             }
         }
     }
 
-    public void handleForwardDataButton(){
-        if(!showLatestData) {
-            int tempSelectedRoverDataPos = selectedRoverDataPos;
-            if (selectedRoverDataPos == 99) {
-                tempSelectedRoverDataPos = 0;
-            } else {
-                tempSelectedRoverDataPos++;
-            }
-            if (rovers.get(selectedRoverPos).roverData[tempSelectedRoverDataPos] != null) {
-                selectedRoverDataPos++;
+    public void handleForwardDataButton() {
+        if (!showLatestData) {
+            if (selectedRoverDataPos != rovers.get(selectedRoverPos).dataPosition) {
+                int tempSelectedRoverDataPos = selectedRoverDataPos;
+                if (selectedRoverDataPos == 99) {
+                    tempSelectedRoverDataPos = 0;
+                } else {
+                    tempSelectedRoverDataPos++;
+                }
+                selectedRoverDataPos = tempSelectedRoverDataPos;
                 dataDisplayWindow(selectedRoverPos, selectedRoverDataPos);
             }
         }
     }
+
+
+
 
     public void handleShowLatestData(){
         if(showLatestData){
@@ -439,6 +447,8 @@ public class Controller {
         anchorPane.getChildren().remove(roverButtons.get(tempSelectedRoverPos));
         roverButtons.remove(tempSelectedRoverPos);
         rovers.remove(tempSelectedRoverPos);
+        anchorPane.getChildren().removeAll(lines);
+        lines.clear();
         deleting = false;
     }
 
@@ -537,46 +547,99 @@ public class Controller {
     }
 
     public void roverPositionUpdater(int pos) {
+        try {
+            roverButtons.get(pos).setLayoutX((positionFinderX(pos, -1)) - 25);
+            roverButtons.get(pos).setLayoutY((positionFinderY(pos, -1)) - 25);
+        } catch (Exception e){
+            System.err.println("No location found for " + rovers.get(pos).getName());
+        }
+
+        if (selectedRoverPos == pos){
+            linePath(pos);
+        }
 
 
-            try {
-                double roverX = rovers.get(pos).roverData[rovers.get(pos).dataPosition].locationX;
-                double roverY = rovers.get(pos).roverData[rovers.get(pos).dataPosition].locationY;
+    }
 
+    public double positionFinderX(int pos, int tempDataPosition) {
+        double roverX;
+        if (tempDataPosition == -1) {
+            roverX = rovers.get(pos).roverData[rovers.get(pos).dataPosition].locationX;
+        } else {
+            roverX = rovers.get(pos).roverData[tempDataPosition].locationX;
+        }
+        double diff;
+        double roverPos;
+        if (topLeftX > bottomRightX) {
+            diff = topLeftX - bottomRightX;
+            roverPos = topLeftX - roverX;
+        } else {
+            diff = bottomRightX - topLeftX;
+            roverPos = bottomRightX - roverX;
+        }
+        double mapX = map.getWidth();
+        double scale = mapX / diff;
+        return (roverPos * scale) * mapScale;
+    }
 
-                double diff;
-                double roverPos;
-                if (topLeftX > bottomRightX) {
-                    diff = topLeftX - bottomRightX;
-                    roverPos = topLeftX - roverX;
-                } else {
-                    diff = bottomRightX - topLeftX;
-                    roverPos = bottomRightX - roverX;
+    public double positionFinderY(int pos, int tempDataPosition){
+        double roverY;
+        if (tempDataPosition == -1) {
+            roverY = rovers.get(pos).roverData[rovers.get(pos).dataPosition].locationY;
+        }
+        else{
+            roverY = rovers.get(pos).roverData[tempDataPosition].locationY;
+        }
+        double diff;
+        double roverPos;
+        if (topLeftY > bottomRightY) {
+            diff = topLeftY - bottomRightY;
+            roverPos = topLeftY - roverY;
+        } else {
+            diff = bottomRightY - topLeftY;
+            roverPos = bottomRightY - roverY;
+        }
+        double mapY = map.getHeight();
+        double scale = mapY / diff;
+        return (roverPos * scale) * mapScale;
+    }
+
+    public void linePath(int pos) {
+        int tempDataPosition = rovers.get(pos).dataPosition;
+        anchorPane.getChildren().removeAll(lines);
+        lines.clear();
+        if(tempDataPosition != -1) {
+            double newValueX;
+            double newValueY;
+            double oldValueX = positionFinderX(pos, tempDataPosition);
+            double oldValueY = positionFinderY(pos, tempDataPosition);
+
+            for (int i = 0; i < 99; i++) {
+
+                tempDataPosition--;
+                if (tempDataPosition < 0) {
+                    tempDataPosition = 99;
+                } else if (tempDataPosition > 99) {
+                    tempDataPosition = 0;
                 }
 
-                double mapX = map.getWidth();
-
-                double scale = mapX / diff;
-                roverButtons.get(pos).setLayoutX(((roverPos * scale) * mapScale) - 25);
-
-
-                if (topLeftY > bottomRightY) {
-                    diff = topLeftY - bottomRightY;
-                    roverPos = topLeftY - roverY;
-                } else {
-                    diff = bottomRightY - topLeftY;
-                    roverPos = bottomRightY - roverY;
+                if (rovers.get(pos).roverData[tempDataPosition] == null) {
+                    break;
                 }
 
-                double mapY = map.getHeight();
+                newValueX = positionFinderX(pos, tempDataPosition);
+                newValueY = positionFinderY(pos, tempDataPosition);
 
-                scale = mapY / diff;
-                roverButtons.get(pos).setLayoutY(((roverPos * scale) * mapScale) - 25);
-            }
-            catch (Exception e){
-                System.err.println("No location found for " + rovers.get(pos).getName());
-            }
+                Line line = new Line(oldValueX, oldValueY, newValueX, newValueY);
+                line.getStrokeDashArray().addAll(7d, 6d);
+                line.setStrokeWidth(2);
+                lines.add(line);
 
+                oldValueX = newValueX;
+                oldValueY = newValueY;
+            }
+            anchorPane.getChildren().addAll(lines);
+        }
     }
 }
 
