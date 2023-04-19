@@ -85,8 +85,20 @@ public class RoverData {
         return date;
     }
 
+    public String getDateFormatted(){
+        char[] arr = date.toCharArray();
+        char[] arr2 = {arr[6], arr[7], '/', arr[4], arr[5], '/', arr[0], arr[1], arr[2], arr[3]};
+        return String.valueOf(arr2);
+    }
+
     public String getTime() {
         return time;
+    }
+
+    public String getTimeFormatted() {
+        char[] arr = time.toCharArray();
+        char[] arr2 = {arr[0], arr[1], ':', arr[2], arr[3], ':', arr[4], arr[5]};
+        return String.valueOf(arr2);
     }
 
     public double getLocationX() {
@@ -107,6 +119,11 @@ public class RoverData {
 
     public String getID() {
         return ID;
+    }
+
+    @Override
+    public String toString() {
+        return "RoverData{" + "sensors" + sensors + ", battery='" + battery +  "date='" + date + '\'' + ", time='" + time + '\'' + ", locationX=" + locationX + ", locationY=" + locationY + '\'' + '}';
     }
 }
 

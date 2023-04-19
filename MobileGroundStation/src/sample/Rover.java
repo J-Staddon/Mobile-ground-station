@@ -1,6 +1,7 @@
 package sample;
 
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 public class Rover {
 
@@ -8,7 +9,6 @@ public class Rover {
     int dataPosition = -1;
     String name;
     String ID;
-
 
     public void saver(PrintWriter pw){
         pw.println(name);
@@ -126,5 +126,13 @@ public class Rover {
 
     public void setID(String ID) {
         this.ID = ID;
+    }
+
+    public String toString() {
+        return "Rover{" +
+                ", dataPosition=" + dataPosition +
+                ", name='" + name + '\'' +
+                ", ID='" + ID + '\'' +
+                '}';
     }
 }
