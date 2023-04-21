@@ -5,6 +5,7 @@ import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -29,6 +30,8 @@ import java.util.Scanner;
 public class Controller {
     Image map;// = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
     Image roverIcon = new Image(getClass().getResourceAsStream("images/roverIcon.png"));
+    Image tempMap;
+    String tempMapFileLocation;
 
     @FXML
     public AnchorPane anchorPane;
@@ -77,10 +80,15 @@ public class Controller {
     public StringProperty valueProperty() { return this.valueProperty; }
 
 
+
+
+
     public void initialize() throws IOException {
         loader();
         setMap(topLeftX, topLeftY, bottomRightX, bottomRightY);
-        //allRoverPositionUpdater();
+
+
+
 
         valueProperty.addListener((observable, oldValue, newValue) -> {
             if(newValue != null){
@@ -95,10 +103,10 @@ public class Controller {
         try (Scanner infile = new Scanner(new FileReader(infileName));) {
             infile.useDelimiter("\r?\n|\r");
             try{
-                mapFileLocation = infile.next();
-                map = new Image(mapFileLocation);
+                tempMapFileLocation = infile.next();
+                tempMap = new Image(tempMapFileLocation);
             } catch (Exception e){
-                map = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
+                tempMap = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
                 System.err.println("Could not find a saved map");
             }
             topLeftX = infile.nextDouble();
@@ -173,6 +181,25 @@ public class Controller {
         }
     }
 
+    private void stageSetter(Parent root, Stage newStage) {
+        newStage.setScene(new Scene(root));
+        newStage.toFront();
+
+
+        Stage window = (Stage) anchorPane.getScene().getWindow();
+        newStage.initOwner(window);
+        newStage.show();
+        newStage.setX(window.getX()+((window.getWidth() - newStage.getWidth()) / 2));
+        newStage.setY(window.getY()+((window.getHeight() - newStage.getHeight()) / 2));
+
+
+        Stage stage;
+        stage = newStage;
+        newStage.close();
+        stage.showAndWait();
+    }
+
+
     public void handleNewRoverButton() throws IOException {
         if (!pause) {
             pause = true;
@@ -183,13 +210,13 @@ public class Controller {
                 controllerNewRover.setParentController(this);
                 controllerNewRover.idTextField.setText(foundID);
 
+
                 Stage newRoverPage = new Stage();
                 newRoverPage.setTitle("Create rover");
-                newRoverPage.setScene(new Scene(root));
-                newRoverPage.setAlwaysOnTop(true);
                 newRoverPage.setResizable(false);
-                newRoverPage.showAndWait();
+                stageSetter(root, newRoverPage);
                 foundID = "";
+
             } catch (Exception e) {
                 System.err.println("New Rover Error");
             }
@@ -210,10 +237,8 @@ public class Controller {
 
                 Stage editRoverPage = new Stage();
                 editRoverPage.setTitle("Edit rover");
-                editRoverPage.setScene(new Scene(root));
-                editRoverPage.setAlwaysOnTop(true);
                 editRoverPage.setResizable(false);
-                editRoverPage.showAndWait();
+                stageSetter(root, editRoverPage);
             } catch (Exception e) {
                 System.err.println("Edit Rover Error");
             }
@@ -222,17 +247,16 @@ public class Controller {
     }
 
     public void handleChangeMapButton(){
+
         if (!pause) {
-            boolean closed = false;
             final FileChooser fileChooser = new FileChooser();
             try {
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
                 Stage stage = (Stage) anchorPane.getScene().getWindow();
                 File file = fileChooser.showOpenDialog(stage);
-                mapFileLocation = file.getPath();
-                map = new Image(file.toURI().toString());
+                tempMapFileLocation = file.getPath();
+                tempMap = new Image(file.toURI().toString());
 
-//                if (file != null){
                 pause = true;
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleMapCoordinates.fxml"));
@@ -242,50 +266,44 @@ public class Controller {
 
                     Stage changeMapPage = new Stage();
                     changeMapPage.setTitle("Map Coordinates");
-                    changeMapPage.setScene(new Scene(root));
-                    changeMapPage.setAlwaysOnTop(true);
                     changeMapPage.setResizable(false);
-                    changeMapPage.showAndWait();
+                    stageSetter(root, changeMapPage);
 
                 } catch (Exception e) {
                     System.err.println("Map Coordinates Error");
                 }
-                pause = false;
 
 
             } catch (Exception e) {
                 System.err.println("Map Error");
             }
-
+        pause = false;
 
 
         }
     }
 
     public void handleCompareDataButton() {
-        if (!pause) {
-            pause = true;
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleCompareData.fxml"));
-                Parent root = loader.load();
-                ControllerCompareData controllerCompareData = loader.getController();
-                controllerCompareData.setParentController(this);
 
-                Stage compareDataPage = new Stage();
-                compareDataPage.setTitle("Compare Data");
-                compareDataPage.setScene(new Scene(root));
-                compareDataPage.setAlwaysOnTop(true);
-                compareDataPage.setResizable(true);
-                compareDataPage.showAndWait();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("sampleCompareData.fxml"));
+            Parent root = loader.load();
+            ControllerCompareData controllerCompareData = loader.getController();
+            controllerCompareData.setParentController(this);
 
-            } catch (Exception e) {
-                System.err.println("Compare Data Error");
-            }
-            pause = false;
+            Stage compareDataPage = new Stage();
+            compareDataPage.setTitle("Compare Data");
+            stageSetter(root, compareDataPage);
+
+        } catch (Exception e) {
+            System.err.println("Compare Data Error");
+
         }
     }
 
     public void setMap(double TLX, double TLY, double BRX, double BRY){
+        map = tempMap;
+        mapFileLocation = tempMapFileLocation;
         topLeftX = TLX;
         topLeftY = TLY;
         bottomRightX = BRX;
@@ -402,6 +420,10 @@ public class Controller {
     }
 
     public void dataDisplayWindow(int pos, int dataPos){
+        ScrollBar scrollBar1 = (ScrollBar) rightListView.lookup(".scroll-bar:vertical");
+        ScrollBar scrollBar2 = (ScrollBar) rightListView1.lookup(".scroll-bar:vertical");
+        scrollBar1.valueProperty().bindBidirectional(scrollBar2.valueProperty());
+
         Rover tempRover = rovers.get(pos);
         rightListView1.getItems().clear();
         rightListView.getItems().clear();
@@ -482,16 +504,13 @@ public class Controller {
     public void roverMaker(String name, String ID) throws IOException {
 
         Rover rover = new Rover();
-        //numOfRovers++;
         rover.roverInsulator(name, ID);
-        //roverDataUpdater(rover, file, false);
-        //roverDataUpdaterV2();
         rovers.add(rover);
-        roverButtonMaker(name, ID);
+        roverButtonMaker(ID);
         roverSelectPanel(findRoverPos(ID));
     }
 
-    private void roverButtonMaker(String name, String ID){
+    private void roverButtonMaker(String ID){
         Button button;
         button = new Button();
         button.setId(ID);

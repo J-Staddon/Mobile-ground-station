@@ -90,8 +90,8 @@ public class ControllerCompareData {
         TableColumn<String[],String> batteryColumn = new TableColumn("Battery");
         TableColumn<String[],String> dateColumn = new TableColumn("Date");
         TableColumn<String[],String> timeColumn = new TableColumn("Time");
-        TableColumn<String[],String> locationXColumn = new TableColumn("LocationX");
-        TableColumn<String[],String> locationYColumn = new TableColumn("LocationY");
+        TableColumn<String[],String> locationXColumn = new TableColumn("Latitude");
+        TableColumn<String[],String> locationYColumn = new TableColumn("Longitude");
 
         table.getColumns().addAll(IDColumn, nameColumn, batteryColumn, dateColumn, timeColumn, locationXColumn, locationYColumn);
 
@@ -99,37 +99,37 @@ public class ControllerCompareData {
         int finalArrayPosition = arrayPosition;
         IDColumn.setCellValueFactory((p)->{
             String[] x = p.getValue();
-            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+1] : "Missing ID");
+            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+1] : "Null");
         });
 
         nameColumn.setCellValueFactory((p)->{
             String[] x = p.getValue();
-            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+2] : "Missing Name");
+            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+2] : "Null");
         });
 
         batteryColumn.setCellValueFactory((p)->{
             String[] x = p.getValue();
-            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+3] : "Missing Battery");
+            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+3] : "Null");
         });
 
         dateColumn.setCellValueFactory((p)->{
             String[] x = p.getValue();
-            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+4] : "Missing Date");
+            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+4] : "Null");
         });
 
         timeColumn.setCellValueFactory((p)->{
             String[] x = p.getValue();
-            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+5] : "Missing Time");
+            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+5] : "Null");
         });
 
         locationXColumn.setCellValueFactory((p)->{
             String[] x = p.getValue();
-            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+6] : "Missing X Coordinate");
+            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+6] : "Null");
         });
 
         locationYColumn.setCellValueFactory((p)->{
             String[] x = p.getValue();
-            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+7] : "Missing Y Coordinate");
+            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+7] : "Null");
         });
 
         table.getItems().addAll(Arrays.asList(data));

@@ -87,11 +87,11 @@
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <AnchorPane fx:id="rightAnchorPane" maxWidth="240.0" minWidth="240.0" visible="false">
+            <AnchorPane fx:id="rightAnchorPane" maxWidth="250.0" minWidth="250.0" visible="false">
                <children>
                   <Label fx:id="dataLabel" alignment="TOP_LEFT" font="$x1" layoutX="-2.0" layoutY="14.0" prefHeight="27.0" prefWidth="119.0" style="&#10;" text="Rover name" wrapText="false" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
                   <ListView fx:id="rightListView" layoutX="94.0" layoutY="76.0" prefHeight="373.0" prefWidth="138.0" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="94.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="76.0" />
-                  <ListView fx:id="rightListView1" focusTraversable="false" layoutX="8.0" layoutY="76.0" mouseTransparent="true" prefHeight="373.0" prefWidth="85.0" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="76.0" />
+                  <ListView fx:id="rightListView1" focusTraversable="false" mouseTransparent="true" layoutX="8.0" layoutY="76.0"  prefHeight="373.0" prefWidth="85.0" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="76.0" />
                   <Label fx:id="missingDataLabel" layoutX="14.0" layoutY="63.0" prefHeight="37.0" prefWidth="134.0" text="Missing Data!" visible="false" AnchorPane.leftAnchor="14.0">
                      <font>
                         <Font size="20.0" />

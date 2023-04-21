@@ -83,6 +83,8 @@ public class Main extends Application {
 
         primaryStage.setTitle("Mobile Ground Station");
         primaryStage.setScene(new Scene(root, 1080, 720));
+        primaryStage.setMinHeight(300);
+        primaryStage.setMinWidth(400);
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
             event.consume();
