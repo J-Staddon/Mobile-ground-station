@@ -79,10 +79,10 @@ public class ControllerCompareData {
             dataArray[sensorTableSize + 5] = rover.roverData[tempDataPosition].getTimeFormatted();
             dataArray[sensorTableSize + 6] = String.valueOf(rover.roverData[tempDataPosition].locationX);
             dataArray[sensorTableSize + 7] = String.valueOf(rover.roverData[tempDataPosition].locationY);
+            dataArray[sensorTableSize + 8] = String.valueOf(rover.roverData[tempDataPosition].rotation);
             data[arrayDataPosition] = dataArray;
             arrayDataPosition++;
         }
-
 
 
     TableColumn<String[],String> IDColumn = new TableColumn("ID");
@@ -92,8 +92,10 @@ public class ControllerCompareData {
         TableColumn<String[],String> timeColumn = new TableColumn("Time");
         TableColumn<String[],String> locationXColumn = new TableColumn("Latitude");
         TableColumn<String[],String> locationYColumn = new TableColumn("Longitude");
+        TableColumn<String[],String> rotationColumn = new TableColumn("Direction");
 
-        table.getColumns().addAll(IDColumn, nameColumn, batteryColumn, dateColumn, timeColumn, locationXColumn, locationYColumn);
+
+        table.getColumns().addAll(IDColumn, nameColumn, batteryColumn, dateColumn, timeColumn, locationXColumn, locationYColumn, rotationColumn);
 
 
         int finalArrayPosition = arrayPosition;
@@ -130,6 +132,11 @@ public class ControllerCompareData {
         locationYColumn.setCellValueFactory((p)->{
             String[] x = p.getValue();
             return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+7] : "Null");
+        });
+
+        rotationColumn.setCellValueFactory((p)->{
+            String[] x = p.getValue();
+            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+8] : "Null");
         });
 
         table.getItems().addAll(Arrays.asList(data));

@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.shape.Line;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -75,13 +75,14 @@ public class Main extends Application {
         dataService dataService = new dataService();
         dataService.start();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxmlFiles/sample.fxml"));
         Parent root = loader.load();
         Controller controller = loader.getController();
 
         controller.valueProperty().bind(dataService.valueProperty());
 
         primaryStage.setTitle("Mobile Ground Station");
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("images/programIcon.png")));
         primaryStage.setScene(new Scene(root, 1080, 720));
         primaryStage.setMinHeight(300);
         primaryStage.setMinWidth(400);

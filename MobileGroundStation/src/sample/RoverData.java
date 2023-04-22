@@ -15,6 +15,7 @@ public class RoverData {
     ArrayList<String> sensors = new ArrayList<>();
     String ID;
     String battery;
+    double rotation;
 
 
     public void saver(PrintWriter pw){
@@ -39,7 +40,10 @@ public class RoverData {
         pw.print(ID);
         pw.print('#');
         pw.print('B');
-        pw.println(battery);
+        pw.print(battery);
+        pw.print('#');
+        pw.print('R');
+        pw.println(rotation);
     }
 
     public boolean addData(String receivedData){
@@ -72,6 +76,9 @@ public class RoverData {
                         break;
                     case 'B':
                         battery = data;
+                        break;
+                    case 'R':
+                        rotation = Double.parseDouble(data);
                         break;
                     default:
                         return true;

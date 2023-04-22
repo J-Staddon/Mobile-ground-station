@@ -44,7 +44,7 @@ public class ControllerEditRover {
                         }
                     }
                     if(!IDinUse) {
-                        controller.roverUpdater(nameTextField.getText(), idTextField.getText());
+                        controller.roverEditor(nameTextField.getText(), idTextField.getText());
                         Node n = (Node) actionEvent.getSource();
                         Stage stage = (Stage) n.getScene().getWindow();
                         stage.close();

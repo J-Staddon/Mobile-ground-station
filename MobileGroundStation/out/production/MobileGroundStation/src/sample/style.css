@@ -1,0 +1,4 @@
+.listViewLabels .scroll-bar:vertical {
+    -fx-padding: -10;
+    -fx-opacity: 0;
+}

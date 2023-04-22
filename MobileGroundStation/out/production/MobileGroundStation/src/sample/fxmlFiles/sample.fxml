@@ -51,9 +51,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<VBox prefHeight="600.0" prefWidth="900.0" styleClass="vbox" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <MenuBar VBox.vgrow="NEVER">
+      <MenuBar styleClass="menuBar" stylesheets="@../style.css" VBox.vgrow="NEVER">
          <menus>
             <Menu mnemonicParsing="false" text="Options">
                <items>
@@ -68,7 +68,7 @@
       </MenuBar>
       <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <items>
-            <AnchorPane maxWidth="-Infinity" prefWidth="220.0">
+            <AnchorPane maxWidth="-Infinity" prefWidth="220.0" styleClass="leftAnchorPane" stylesheets="@../style.css">
                <children>
                   <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Rovers" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="14.0">
                      <font>
@@ -78,20 +78,20 @@
                   <ListView fx:id="leftListView" layoutX="5.0" layoutY="54.0" prefHeight="484.0" prefWidth="209.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="54.0" />
                </children>
             </AnchorPane>
-            <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
+            <ScrollPane prefHeight="-1.0" prefWidth="-1.0" styleClass="scrollPane" stylesheets="@../style.css">
                <content>
-                  <AnchorPane id="Content" fx:id="anchorPane" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0" styleClass="body">
+                  <AnchorPane id="Content" fx:id="anchorPane" minHeight="-1.0" minWidth="-1.0" prefHeight="1.0" prefWidth="0.0" styleClass="body" stylesheets="@../style.css">
                      <children>
-                        <ImageView fx:id="mapImageView" fitHeight="551.0" fitWidth="643.0" layoutX="36.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <ImageView fx:id="mapImageView" fitHeight="17.0" fitWidth="14.0" layoutX="36.0" layoutY="-8.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <AnchorPane fx:id="rightAnchorPane" maxWidth="250.0" minWidth="250.0" visible="false">
+            <AnchorPane fx:id="rightAnchorPane" maxWidth="250.0" minWidth="250.0" styleClass="rightAnchorPane" stylesheets="@../style.css" visible="false">
                <children>
                   <Label fx:id="dataLabel" alignment="TOP_LEFT" font="$x1" layoutX="-2.0" layoutY="14.0" prefHeight="27.0" prefWidth="119.0" style="&#10;" text="Rover name" wrapText="false" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
                   <ListView fx:id="rightListView" layoutX="94.0" layoutY="76.0" prefHeight="373.0" prefWidth="138.0" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="94.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="76.0" />
-                  <ListView fx:id="rightListView1" focusTraversable="false" mouseTransparent="true" layoutX="8.0" layoutY="76.0"  prefHeight="373.0" prefWidth="85.0" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="76.0" />
+                  <ListView fx:id="rightListView1" focusTraversable="false" layoutX="8.0" layoutY="76.0" mouseTransparent="true" prefHeight="373.0" prefWidth="85.0" styleClass="listViewLabels" stylesheets="@../style.css" AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="76.0" />
                   <Label fx:id="missingDataLabel" layoutX="14.0" layoutY="63.0" prefHeight="37.0" prefWidth="134.0" text="Missing Data!" visible="false" AnchorPane.leftAnchor="14.0">
                      <font>
                         <Font size="20.0" />
@@ -101,7 +101,7 @@
                      <graphic>
                         <ImageView fitHeight="27.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../UIImages/edit-icon.png" />
+                              <Image url="@../images/edit-icon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -119,17 +119,17 @@
                         <Font size="14.0" fx:id="x111" />
                      </font>
                   </Label>
-                  <ImageView fx:id="batteryImageView" fitHeight="23.0" fitWidth="50.0" layoutX="177.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="batteryImageView" fitHeight="23.0" fitWidth="50.0" layoutX="188.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/battery%20icon.png" />
+                        <Image url="@../images/battery%20icon.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="batteryLabel" alignment="TOP_LEFT" layoutX="182.0" layoutY="54.0" prefHeight="27.0" prefWidth="96.0" style="&#10;" text="100%" wrapText="false">
+                  <Label fx:id="batteryLabel" alignment="TOP_LEFT" layoutX="193.0" layoutY="54.0" prefHeight="27.0" prefWidth="96.0" style="&#10;" text="100%" wrapText="false">
                      <font>
                         <Font name="System Bold" size="10.0" fx:id="x1111" />
                      </font>
                   </Label>
-                  <Label fx:id="IDLabel" alignment="TOP_LEFT" layoutX="16.0" layoutY="40.0" prefHeight="27.0" prefWidth="50.0" style="&#10;" text="0000" wrapText="false">
+                  <Label fx:id="IDLabel" alignment="TOP_LEFT" layoutX="15.0" layoutY="41.0" prefHeight="27.0" prefWidth="50.0" style="&#10;" text="0000" wrapText="false">
                      <font>
                         <Font size="14.0" fx:id="x1112" />
                      </font>
@@ -138,7 +138,7 @@
             </AnchorPane>
          </items>
       </SplitPane>
-      <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
+      <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" styleClass="hbox" stylesheets="@../style.css" VBox.vgrow="NEVER">
          <children>
             <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
             <Label maxWidth="-1.0" text="Zoom" HBox.hgrow="NEVER" />
