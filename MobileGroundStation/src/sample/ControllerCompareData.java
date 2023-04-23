@@ -25,10 +25,6 @@ public class ControllerCompareData {
     public TableView<String[]> tableOfDataRight;
     private Controller controller;
 
-    @FXML
-    private void initialize() {
-    }
-
 
     public void tableUpdater(Rover rover, TableView<String[]> table) {
         table.getColumns().clear();

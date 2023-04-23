@@ -25,11 +25,12 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Controller {
-    Image map = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
     Image roverIcon = new Image(getClass().getResourceAsStream("images/roverIcon.png"));
-    ImageView roverIconIV = new ImageView(roverIcon);
+    Image map = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
     Image tempMap;
+    String mapFileLocation;
     String tempMapFileLocation;
+
 
     @FXML
     public AnchorPane anchorPane;
@@ -49,21 +50,16 @@ public class Controller {
     public Button forwardDataButton;
     public Button backDataButton;
 
-    private StringProperty valueProperty = new SimpleStringProperty("");
 
     double topLeftX;
     double topLeftY;
     double bottomRightX;
     double bottomRightY;
 
-    String mapFileLocation;
-
-
-
     public int selectedRoverPos = -1;
     public int selectedRoverDataPos = -1;
+    public float mapScale = 1;
     public String foundID = "";
-    //int numOfRovers = 0;
     String infileName = "files/saveData.txt";
     public boolean deleting = false;
     public boolean showLatestData = true;
@@ -73,13 +69,11 @@ public class Controller {
     ArrayList<Button> roverButtons = new ArrayList<Button>();
     ArrayList<String> ignoreIDList = new ArrayList<String>();
     List<Line> lines = new ArrayList<>();
-    public float mapScale = 1;
+
+    private StringProperty valueProperty = new SimpleStringProperty("");
+
 
     public StringProperty valueProperty() { return this.valueProperty; }
-
-
-
-
 
     public void initialize() throws IOException {
         loader();
@@ -195,6 +189,15 @@ public class Controller {
         stage.showAndWait();
     }
 
+    public void alertSetter(Alert alert) {
+        Stage window = (Stage) anchorPane.getScene().getWindow();
+        alert.initOwner(window);
+        alert.setX(window.getX()+((window.getWidth() - alert.getWidth()) / 2));
+        alert.setY(window.getY()+((window.getHeight() - alert.getHeight()) / 2));
+        alert.showAndWait();
+    }
+
+
 
     public void handleNewRoverButton() throws IOException {
         if (!pause) {
@@ -289,6 +292,8 @@ public class Controller {
 
             Stage compareDataPage = new Stage();
             compareDataPage.setTitle("Compare Data");
+            compareDataPage.setMinHeight(300);
+            compareDataPage.setMinWidth(600);
             stageSetter(root, compareDataPage);
 
         } catch (Exception e) {
@@ -377,9 +382,6 @@ public class Controller {
         }
     }
 
-
-
-
     public void handleShowLatestData(){
         if(showLatestData){
             showLatestData = false;
@@ -421,6 +423,8 @@ public class Controller {
         scrollBar1.valueProperty().bindBidirectional(scrollBar2.valueProperty());
 
         Rover tempRover = rovers.get(pos);
+        leftListView.scrollTo(tempRover);
+        leftListView.getSelectionModel().select(tempRover);
         rightListView1.getItems().clear();
         rightListView.getItems().clear();
         try {
@@ -540,10 +544,11 @@ public class Controller {
 
                 Alert alert = new Alert(Alert.AlertType.NONE, "", yes, no);
 
+
                 alert.setTitle("New Rover Found!");
-                alert.setHeaderText("A new rover has been discovered");
+                alert.setHeaderText("A new rover has been discovered: #" + roverData.ID);
                 alert.setContentText("Do you want to add it?\n\nIf you press no this rover will be ignored unless manually added");
-                alert.showAndWait();
+                alertSetter(alert);
                 if (Objects.equals(alert.getResult().getText(), "Yes")){
                     foundID = roverData.getID();
                     handleNewRoverButton();
@@ -559,7 +564,7 @@ public class Controller {
                 if ((showLatestData && selectedRoverPos == pos) || rovers.get(pos).dataPosition == -1) {
                     rovers.get(pos).updateValues(roverData);
                     selectedRoverDataPos = rovers.get(pos).dataPosition;
-                    dataDisplayWindow(pos, selectedRoverDataPos);
+                    handleButtonClick(pos);
                 }
                 else{
                     rovers.get(pos).updateValues(roverData);

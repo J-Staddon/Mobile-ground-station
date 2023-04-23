@@ -56,7 +56,7 @@ public class Main extends Application {
         alert.setTitle("Quitting");
         alert.setHeaderText("Closing Program");
         alert.setContentText("Do you want to save before exiting?");
-        alert.showAndWait();
+        controller.alertSetter(alert);
         if (Objects.equals(alert.getResult().getText(), "Yes")){
             controller.saver();
             System.out.println("Data has been saved");
