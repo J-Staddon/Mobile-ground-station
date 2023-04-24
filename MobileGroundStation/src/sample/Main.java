@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -81,11 +82,26 @@ public class Main extends Application {
 
         controller.valueProperty().bind(dataService.valueProperty());
 
+
+
         primaryStage.setTitle("Mobile Ground Station");
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("images/programIcon.png")));
         primaryStage.setScene(new Scene(root, 1080, 720));
         primaryStage.setMinHeight(300);
         primaryStage.setMinWidth(400);
+
+        primaryStage.getScene().setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.CONTROL) {
+                controller.zoomKey = true;
+            }
+        });
+
+        primaryStage.getScene().setOnKeyReleased(e -> {
+            if (e.getCode() == KeyCode.CONTROL) {
+                controller.zoomKey = false;
+            }
+        });
+
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
             event.consume();

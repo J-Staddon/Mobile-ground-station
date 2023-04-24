@@ -76,6 +76,7 @@ public class ControllerCompareData {
             dataArray[sensorTableSize + 6] = String.valueOf(rover.roverData[tempDataPosition].locationX);
             dataArray[sensorTableSize + 7] = String.valueOf(rover.roverData[tempDataPosition].locationY);
             dataArray[sensorTableSize + 8] = String.valueOf(rover.roverData[tempDataPosition].rotation);
+            dataArray[sensorTableSize + 9] = String.valueOf(rover.roverData[tempDataPosition].message);
             data[arrayDataPosition] = dataArray;
             arrayDataPosition++;
         }
@@ -89,9 +90,9 @@ public class ControllerCompareData {
         TableColumn<String[],String> locationXColumn = new TableColumn("Latitude");
         TableColumn<String[],String> locationYColumn = new TableColumn("Longitude");
         TableColumn<String[],String> rotationColumn = new TableColumn("Direction");
+        TableColumn<String[],String> messageColumn = new TableColumn("Message");
 
-
-        table.getColumns().addAll(IDColumn, nameColumn, batteryColumn, dateColumn, timeColumn, locationXColumn, locationYColumn, rotationColumn);
+        table.getColumns().addAll(IDColumn, nameColumn, batteryColumn, dateColumn, timeColumn, locationXColumn, locationYColumn, rotationColumn, messageColumn);
 
 
         int finalArrayPosition = arrayPosition;
@@ -135,6 +136,11 @@ public class ControllerCompareData {
             return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+8] : "Null");
         });
 
+        messageColumn.setCellValueFactory((p)->{
+            String[] x = p.getValue();
+            return new SimpleStringProperty(x != null && x.length>1 ? x[finalArrayPosition+9] : "Null");
+        });
+
         table.getItems().addAll(Arrays.asList(data));
     }
 
@@ -174,6 +180,10 @@ public class ControllerCompareData {
         roverMenu.getItems().addAll(menuItemList);
     }
 
+    public void tableToExcel(){
+//        Workbook workbook = new HSSFWorkbook();
+//        Sheet spreadsheet = workbook.createSheet("sample");
+    }
 
 
     public void setParentController(Controller controller){

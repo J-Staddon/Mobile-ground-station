@@ -78,7 +78,7 @@
                   <ListView fx:id="leftListView" layoutX="5.0" layoutY="54.0" prefHeight="484.0" prefWidth="209.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="54.0" />
                </children>
             </AnchorPane>
-            <ScrollPane prefHeight="-1.0" prefWidth="-1.0" styleClass="scrollPane" stylesheets="@../style.css">
+            <ScrollPane fx:id="scrollPane" prefHeight="-1.0" prefWidth="-1.0" styleClass="scrollPane" stylesheets="@../style.css">
                <content>
                   <AnchorPane id="Content" fx:id="anchorPane" minHeight="-1.0" minWidth="-1.0" prefHeight="1.0" prefWidth="0.0" styleClass="body" stylesheets="@../style.css">
                      <children>

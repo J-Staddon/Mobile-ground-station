@@ -11,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.paint.Paint;
@@ -35,6 +37,7 @@ public class Controller {
     @FXML
     public AnchorPane anchorPane;
     public AnchorPane rightAnchorPane;
+    public ScrollPane scrollPane;
     public ListView<Rover> leftListView;
     public ListView<String> rightListView;
     public ListView<String> rightListView1;
@@ -64,6 +67,7 @@ public class Controller {
     public boolean deleting = false;
     public boolean showLatestData = true;
     public boolean pause = false;
+    public boolean zoomKey = false;
     public Rover currentView;
     ArrayList<Rover> rovers = new ArrayList<Rover>();
     ArrayList<Button> roverButtons = new ArrayList<Button>();
@@ -79,6 +83,18 @@ public class Controller {
         loader();
         setMap(topLeftX, topLeftY, bottomRightX, bottomRightY);
         allRoverRotationUpdater();
+
+        scrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+            if (zoomKey) {
+                double deltaY = event.getDeltaY();
+                if (deltaY < 0) {
+                    handleZoomOut();
+                } else {
+                    handleZoomIn();
+                }
+                event.consume();
+            }
+                });
 
         valueProperty.addListener((observable, oldValue, newValue) -> {
             if(newValue != null){
@@ -443,6 +459,7 @@ public class Controller {
             for (int i = 0; i < tempRoverData.sensors.size(); i++) {
                 rightListView1.getItems().add("Sensor " + (i + 1));
             }
+            rightListView1.getItems().add("Message");
 
             String date = tempRoverData.getDateFormatted();
             String time = tempRoverData.getTimeFormatted();
@@ -458,6 +475,8 @@ public class Controller {
             for (int i = 0; i < tempRoverData.sensors.size(); i++) {
                 rightListView.getItems().add(tempRoverData.sensors.get(i));
             }
+
+            rightListView.getItems().add(tempRoverData.message);
         }
         catch (Exception e){
             System.err.println("Rover Display Data Error");
@@ -528,8 +547,8 @@ public class Controller {
 
         anchorPane.getChildren().add(button);
 
-        button.setLayoutX(100);
-        button.setLayoutY(200);
+        button.setLayoutX(-100);
+        button.setLayoutY(-100);
         roverButtons.add(button);
     }
 

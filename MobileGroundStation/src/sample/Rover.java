@@ -39,6 +39,7 @@ public class Rover {
         if (dataPosition == -1){
             tempRoverData[0] = data;
             dataPosition = 0;
+            dataPlaced = true;
         }
         else {
             for (int i = 0; i < 100; i++) {
@@ -55,6 +56,7 @@ public class Rover {
                     if (!dataPlaced){
                         tempRoverData[newTempDataPosition] = data;
                         dataPosition++;
+                        dataPlaced = true;
                     }
                     break;
                 }
@@ -89,6 +91,10 @@ public class Rover {
                 front = false;
             }
         }
+        if(!dataPlaced){
+            dataPosition++;
+        }
+
         if(dataPosition == 100){
             dataPosition = 0;
         }

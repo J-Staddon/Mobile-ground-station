@@ -16,6 +16,7 @@ public class RoverData {
     String ID;
     String battery;
     double rotation;
+    String message = "";
 
 
     public void saver(PrintWriter pw){
@@ -43,7 +44,10 @@ public class RoverData {
         pw.print(battery);
         pw.print('#');
         pw.print('R');
-        pw.println(rotation);
+        pw.print(rotation);
+        pw.print('#');
+        pw.print('M');
+        pw.println(message);
     }
 
     public boolean addData(String receivedData){
@@ -79,6 +83,9 @@ public class RoverData {
                         break;
                     case 'R':
                         rotation = Double.parseDouble(data);
+                        break;
+                    case 'M':
+                        message = data;
                         break;
                     default:
                         return true;
