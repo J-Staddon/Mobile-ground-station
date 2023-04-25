@@ -459,7 +459,7 @@ public class Controller {
             for (int i = 0; i < tempRoverData.sensors.size(); i++) {
                 rightListView1.getItems().add("Sensor " + (i + 1));
             }
-            rightListView1.getItems().add("Message");
+
 
             String date = tempRoverData.getDateFormatted();
             String time = tempRoverData.getTimeFormatted();
@@ -476,7 +476,10 @@ public class Controller {
                 rightListView.getItems().add(tempRoverData.sensors.get(i));
             }
 
-            rightListView.getItems().add(tempRoverData.message);
+            if(!tempRoverData.message.equals("")) {
+                rightListView1.getItems().add("Message");
+                rightListView.getItems().add(tempRoverData.message);
+            }
         }
         catch (Exception e){
             System.err.println("Rover Display Data Error");
@@ -642,7 +645,7 @@ public class Controller {
         }
         double diff;
         double roverPos;
-        if (topLeftX > bottomRightX) {
+        if (topLeftX < bottomRightX) {
             diff = topLeftX - bottomRightX;
             roverPos = topLeftX - roverX;
         } else {
