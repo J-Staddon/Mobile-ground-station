@@ -180,11 +180,6 @@ public class ControllerCompareData {
         roverMenu.getItems().addAll(menuItemList);
     }
 
-    public void tableToExcel(){
-//        Workbook workbook = new HSSFWorkbook();
-//        Sheet spreadsheet = workbook.createSheet("sample");
-    }
-
 
     public void setParentController(Controller controller){
         this.controller = controller;
