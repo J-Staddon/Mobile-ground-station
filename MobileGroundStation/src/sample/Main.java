@@ -47,7 +47,7 @@ public class Main extends Application {
         launch(args);
     }
 
-    public void close(Stage stage, Controller controller) throws IOException {
+    private void close(Stage stage, Controller controller) throws IOException {
         ButtonType yes = new ButtonType("Yes");
         ButtonType no = new ButtonType("No");
         ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -81,8 +81,6 @@ public class Main extends Application {
         Controller controller = loader.getController();
 
         controller.valueProperty().bind(dataService.valueProperty());
-
-
 
         primaryStage.setTitle("Mobile Ground Station");
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("images/programIcon.png")));

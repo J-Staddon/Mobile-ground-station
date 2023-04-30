@@ -50,6 +50,7 @@
                         <MenuButton fx:id="roverMenuLeft" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" text="Select Rover" visible="false" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="50.0" />
                         <Button layoutX="58.0" layoutY="10.0" mnemonicParsing="false" onAction="#viewOneRover" text="View One Rover" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="10.0" />
                         <TableView fx:id="tableOfDataLeft" layoutY="110.0" prefHeight="290.0" prefWidth="316.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0" />
+                        <Button fx:id="exportLeftButton" layoutX="14.0" layoutY="79.0" mnemonicParsing="false" onAction="#exportToExcel" prefHeight="25.0" prefWidth="98.0" text="Export to Excel" visible="false" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="80.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane prefHeight="400.0" prefWidth="290.0" HBox.hgrow="ALWAYS">
@@ -57,6 +58,7 @@
                         <TableView fx:id="tableOfDataRight" layoutY="109.0" prefHeight="291.0" prefWidth="284.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0" />
                         <MenuButton fx:id="roverMenuRight" layoutX="171.0" layoutY="51.0" mnemonicParsing="false" text="Select Rover" visible="false" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="50.0" />
                         <Button layoutX="62.0" layoutY="14.0" mnemonicParsing="false" onAction="#viewTwoRovers" text="View Two Rovers" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="10.0" />
+                        <Button fx:id="exportRightButton" layoutX="172.0" layoutY="80.0" mnemonicParsing="false" onAction="#exportToExcel" prefHeight="25.0" prefWidth="98.0" text="Export to Excel" visible="false" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="80.0" />
                      </children>
                   </AnchorPane>
                </children>

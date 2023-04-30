@@ -29,7 +29,7 @@ public class ControllerNewRover {
         });
     }
 
-    public void create(ActionEvent actionEvent) throws IOException {
+    public void create(ActionEvent actionEvent) {
         if (!nameTextField.getText().trim().isEmpty() && !idTextField.getText().trim().isEmpty()) {
             if(nameTextField.getText().length() < 10) {
                 if(idTextField.getText().length() == 4) {
@@ -57,9 +57,5 @@ public class ControllerNewRover {
 
     public void setParentController(Controller controller){
         this.controller = controller;
-    }
-
-    public void setIdTextField(TextField idTextField) {
-        this.idTextField = idTextField;
     }
 }

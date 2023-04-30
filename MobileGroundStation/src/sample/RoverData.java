@@ -8,15 +8,15 @@ import java.util.Scanner;
 
 public class RoverData {
 
-    String date;
-    String time;
-    double locationX;
-    double locationY;
-    ArrayList<String> sensors = new ArrayList<>();
-    String ID;
-    String battery;
-    double rotation;
-    String message = "";
+    private String date;
+    private String time;
+    private double locationX;
+    private double locationY;
+    private ArrayList<String> sensors = new ArrayList<>();
+    private String ID;
+    private String battery;
+    private double rotation;
+    private String message = "";
 
 
     public void saver(PrintWriter pw){
@@ -95,9 +95,6 @@ public class RoverData {
         return false;
     }
 
-    public String getDate() {
-        return date;
-    }
 
     public String getDateFormatted(){
         char[] arr = date.toCharArray();
@@ -105,14 +102,18 @@ public class RoverData {
         return String.valueOf(arr2);
     }
 
-    public String getTime() {
-        return time;
-    }
-
     public String getTimeFormatted() {
         char[] arr = time.toCharArray();
         char[] arr2 = {arr[0], arr[1], ':', arr[2], arr[3], ':', arr[4], arr[5]};
         return String.valueOf(arr2);
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
     }
 
     public double getLocationX() {
@@ -123,10 +124,6 @@ public class RoverData {
         return locationY;
     }
 
-    public String getBattery() {
-        return battery;
-    }
-
     public ArrayList<String> getSensors() {
         return sensors;
     }
@@ -135,9 +132,16 @@ public class RoverData {
         return ID;
     }
 
-    @Override
-    public String toString() {
-        return "RoverData{" + "sensors" + sensors + ", battery='" + battery +  "date='" + date + '\'' + ", time='" + time + '\'' + ", locationX=" + locationX + ", locationY=" + locationY + '\'' + '}';
+    public String getBattery() {
+        return battery;
+    }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
 

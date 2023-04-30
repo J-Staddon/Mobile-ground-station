@@ -1,14 +1,13 @@
 package sample;
 
 import java.io.PrintWriter;
-import java.util.Arrays;
 
 public class Rover {
 
-    RoverData[] roverData = new RoverData[100];
-    int dataPosition = -1;
-    String name;
-    String ID;
+    private RoverData[] roverData = new RoverData[100];
+    private int dataPosition = -1;
+    private String name;
+    private String ID;
 
     public void saver(PrintWriter pw){
         pw.println(name);
@@ -29,7 +28,7 @@ public class Rover {
     }
 
     public void updateValues(RoverData data) {
-        RoverData[] tempRoverData = new RoverData[100];
+        RoverData[] tempRoverData;
         tempRoverData = roverData;
         boolean dataPlaced = false;
         boolean front = true;
@@ -44,7 +43,6 @@ public class Rover {
         else {
             for (int i = 0; i < 100; i++) {
                 tempDataPosition = dataPositionNum- i;
-//                tempDataPosition = tempDataPosition - i;
                 newTempDataPosition = tempDataPosition + 1;
 
                 if (tempDataPosition < 0 || tempDataPosition == 99) {
@@ -106,16 +104,8 @@ public class Rover {
         return roverData;
     }
 
-    public void setRoverData(RoverData[] roverData) {
-        this.roverData = roverData;
-    }
-
     public int getDataPosition() {
         return dataPosition;
-    }
-
-    public void setDataPosition(int dataPosition) {
-        this.dataPosition = dataPosition;
     }
 
     public String getName() {
@@ -132,13 +122,5 @@ public class Rover {
 
     public void setID(String ID) {
         this.ID = ID;
-    }
-
-    public String toString() {
-        return "Rover{" +
-                ", dataPosition=" + dataPosition +
-                ", name='" + name + '\'' +
-                ", ID='" + ID + '\'' +
-                '}';
     }
 }

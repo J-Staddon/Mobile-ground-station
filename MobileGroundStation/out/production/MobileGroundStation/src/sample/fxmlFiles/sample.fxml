@@ -66,9 +66,9 @@
             </Menu>
          </menus>
       </MenuBar>
-      <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <SplitPane fx:id="splitPane" dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <items>
-            <AnchorPane maxWidth="-Infinity" prefWidth="220.0" styleClass="leftAnchorPane" stylesheets="@../style.css">
+            <AnchorPane fx:id="leftAnchorPane" maxWidth="-Infinity" prefWidth="220.0" styleClass="leftAnchorPane" stylesheets="@../style.css">
                <children>
                   <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Rovers" textAlignment="CENTER" wrapText="false" AnchorPane.leftAnchor="14.0">
                      <font>

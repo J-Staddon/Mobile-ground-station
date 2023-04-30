@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
@@ -33,11 +32,12 @@ public class Controller {
     String mapFileLocation;
     String tempMapFileLocation;
 
-
     @FXML
     public AnchorPane anchorPane;
+    public AnchorPane leftAnchorPane;
     public AnchorPane rightAnchorPane;
     public ScrollPane scrollPane;
+    public SplitPane splitPane;
     public ListView<Rover> leftListView;
     public ListView<String> rightListView;
     public ListView<String> rightListView1;
@@ -53,22 +53,21 @@ public class Controller {
     public Button forwardDataButton;
     public Button backDataButton;
 
-
     double topLeftX;
     double topLeftY;
     double bottomRightX;
     double bottomRightY;
 
     public int selectedRoverPos = -1;
-    public int selectedRoverDataPos = -1;
-    public float mapScale = 1;
-    public String foundID = "";
-    String infileName = "files/saveData.txt";
-    public boolean deleting = false;
-    public boolean showLatestData = true;
-    public boolean pause = false;
+    private int selectedRoverDataPos = -1;
+    private float mapScale = 1;
+    private String foundID = "";
+    private final String infileName = "files/saveData.txt";
+    private boolean deleting = false;
+    private boolean showLatestData = true;
+    private boolean pause = false;
     public boolean zoomKey = false;
-    public Rover currentView;
+    private Rover currentView;
     ArrayList<Rover> rovers = new ArrayList<Rover>();
     ArrayList<Button> roverButtons = new ArrayList<Button>();
     ArrayList<String> ignoreIDList = new ArrayList<String>();
@@ -76,13 +75,14 @@ public class Controller {
 
     private StringProperty valueProperty = new SimpleStringProperty("");
 
-
     public StringProperty valueProperty() { return this.valueProperty; }
 
-    public void initialize() throws IOException {
+    public void initialize() {
         loader();
         setMap(topLeftX, topLeftY, bottomRightX, bottomRightY);
         allRoverRotationUpdater();
+
+        resizeRightAnchorPane(0, 0);
 
         scrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
             if (zoomKey) {
@@ -104,7 +104,7 @@ public class Controller {
         });
     }
 
-    private void loader() throws IOException, FileNotFoundException {
+    private void loader(){
         System.out.println(new File("saveData").getAbsolutePath());
         try (Scanner infile = new Scanner(new FileReader(infileName));) {
             infile.useDelimiter("\r?\n|\r");
@@ -130,7 +130,6 @@ public class Controller {
                         rovers.get(findRoverPos(ID)).updateValues(data);
                     }
                 }
-                System.out.println("Hi");
             }
         }
         catch(Exception e){
@@ -179,7 +178,7 @@ public class Controller {
                 roverButtons.get(selectedRoverPos).setBorder(Border.EMPTY);
             }
             selectedRoverPos = pos;
-            selectedRoverDataPos = rovers.get(selectedRoverPos).dataPosition;
+            selectedRoverDataPos = rovers.get(selectedRoverPos).getDataPosition();
             roverButtons.get(selectedRoverPos).setBorder(Border.stroke(Paint.valueOf("#000000")));
             roverButtons.get(selectedRoverPos).toFront();
             linePath(pos);
@@ -191,13 +190,11 @@ public class Controller {
         newStage.setScene(new Scene(root));
         newStage.toFront();
 
-
         Stage window = (Stage) anchorPane.getScene().getWindow();
         newStage.initOwner(window);
         newStage.show();
         newStage.setX(window.getX()+((window.getWidth() - newStage.getWidth()) / 2));
         newStage.setY(window.getY()+((window.getHeight() - newStage.getHeight()) / 2));
-
 
         Stage stage;
         stage = newStage;
@@ -213,9 +210,7 @@ public class Controller {
         alert.showAndWait();
     }
 
-
-
-    public void handleNewRoverButton() throws IOException {
+    public void handleNewRoverButton(){
         if (!pause) {
             pause = true;
             try {
@@ -224,7 +219,6 @@ public class Controller {
                 ControllerNewRover controllerNewRover = loader.getController();
                 controllerNewRover.setParentController(this);
                 controllerNewRover.idTextField.setText(foundID);
-
 
                 Stage newRoverPage = new Stage();
                 newRoverPage.setTitle("Create rover");
@@ -247,8 +241,8 @@ public class Controller {
                 Parent root = loader.load();
                 ControllerEditRover controllerEditRover = loader.getController();
                 controllerEditRover.setParentController(this);
-                controllerEditRover.nameTextField.setText(rovers.get(selectedRoverPos).name);
-                controllerEditRover.idTextField.setText(rovers.get(selectedRoverPos).ID);
+                controllerEditRover.nameTextField.setText(rovers.get(selectedRoverPos).getName());
+                controllerEditRover.idTextField.setText(rovers.get(selectedRoverPos).getID());
 
                 Stage editRoverPage = new Stage();
                 editRoverPage.setTitle("Edit rover");
@@ -287,7 +281,6 @@ public class Controller {
                 } catch (Exception e) {
                     System.err.println("Map Coordinates Error");
                 }
-
 
             } catch (Exception e) {
                 System.err.println("Map Error");
@@ -376,7 +369,7 @@ public class Controller {
             } else {
                 tempSelectedRoverDataPos--;
             }
-            if (rovers.get(selectedRoverPos).roverData[tempSelectedRoverDataPos] != null && rovers.get(selectedRoverPos).dataPosition != tempSelectedRoverDataPos) {
+            if (rovers.get(selectedRoverPos).getRoverData()[tempSelectedRoverDataPos] != null && rovers.get(selectedRoverPos).getDataPosition() != tempSelectedRoverDataPos) {
                 selectedRoverDataPos = tempSelectedRoverDataPos;
                 dataDisplayWindow(selectedRoverPos, selectedRoverDataPos);
             }
@@ -385,7 +378,7 @@ public class Controller {
 
     public void handleForwardDataButton() {
         if (!showLatestData) {
-            if (selectedRoverDataPos != rovers.get(selectedRoverPos).dataPosition) {
+            if (selectedRoverDataPos != rovers.get(selectedRoverPos).getDataPosition()) {
                 int tempSelectedRoverDataPos = selectedRoverDataPos;
                 if (selectedRoverDataPos == 99) {
                     tempSelectedRoverDataPos = 0;
@@ -404,12 +397,10 @@ public class Controller {
         }
         else{
             showLatestData = true;
-            selectedRoverDataPos = rovers.get(selectedRoverPos).dataPosition;
+            selectedRoverDataPos = rovers.get(selectedRoverPos).getDataPosition();
             dataDisplayWindow(selectedRoverPos, selectedRoverDataPos);
         }
     }
-
-
 
     public void roverSelectPanel(int position){
         leftListView.getItems().add(rovers.get(position));
@@ -433,6 +424,11 @@ public class Controller {
         });
     }
 
+    private void resizeRightAnchorPane(int min, int max){
+        rightAnchorPane.setMinWidth(min);
+        rightAnchorPane.setMaxWidth(max);
+    }
+
     public void dataDisplayWindow(int pos, int dataPos){
         ScrollBar scrollBar1 = (ScrollBar) rightListView.lookup(".scroll-bar:vertical");
         ScrollBar scrollBar2 = (ScrollBar) rightListView1.lookup(".scroll-bar:vertical");
@@ -443,6 +439,7 @@ public class Controller {
         leftListView.getSelectionModel().select(tempRover);
         rightListView1.getItems().clear();
         rightListView.getItems().clear();
+        resizeRightAnchorPane(250, 250);
         try {
             missingDataLabel.setVisible(false);
             rightListView.setVisible(true);
@@ -454,9 +451,9 @@ public class Controller {
             backDataButton.setVisible(true);
             batteryImageView.setVisible(true);
             showLatestDataLabel.setVisible(true);
-            RoverData tempRoverData = tempRover.roverData[dataPos];
+            RoverData tempRoverData = tempRover.getRoverData()[dataPos];
             rightListView1.getItems().addAll("ID", "Battery", "Date", "Time", "Latitude", "Longitude", "Direction");
-            for (int i = 0; i < tempRoverData.sensors.size(); i++) {
+            for (int i = 0; i < tempRoverData.getSensors().size(); i++) {
                 rightListView1.getItems().add("Sensor " + (i + 1));
             }
 
@@ -464,21 +461,21 @@ public class Controller {
             String date = tempRoverData.getDateFormatted();
             String time = tempRoverData.getTimeFormatted();
 
-            IDLabel.setText(tempRover.ID);
+            IDLabel.setText(tempRover.getID());
             dateLabel.setText(date);
             timeLabel.setText(time);
-            batteryLabel.setText(tempRoverData.battery + "%");
+            batteryLabel.setText(tempRoverData.getBattery() + "%");
 
-            rightListView.getItems().addAll(tempRover.ID,
-                    tempRoverData.battery + "%", date, time, String.valueOf(tempRoverData.locationX), String.valueOf(tempRoverData.locationY), String.valueOf(tempRoverData.rotation));
+            rightListView.getItems().addAll(tempRover.getID(),
+                    tempRoverData.getBattery() + "%", date, time, String.valueOf(tempRoverData.getLocationX()), String.valueOf(tempRoverData.getLocationY()), String.valueOf(tempRoverData.getRotation()));
 
-            for (int i = 0; i < tempRoverData.sensors.size(); i++) {
-                rightListView.getItems().add(tempRoverData.sensors.get(i));
+            for (int i = 0; i < tempRoverData.getSensors().size(); i++) {
+                rightListView.getItems().add(tempRoverData.getSensors().get(i));
             }
 
-            if(!tempRoverData.message.equals("")) {
+            if(!tempRoverData.getMessage().equals("")) {
                 rightListView1.getItems().add("Message");
-                rightListView.getItems().add(tempRoverData.message);
+                rightListView.getItems().add(tempRoverData.getMessage());
             }
         }
         catch (Exception e){
@@ -494,8 +491,8 @@ public class Controller {
             showLatestDataLabel.setVisible(false);
             missingDataLabel.setVisible(true);
         }
-        dataLabel.setText(tempRover.name);
-        IDLabel.setText(tempRover.ID);
+        dataLabel.setText(tempRover.getName());
+        IDLabel.setText(tempRover.getID());
         rightAnchorPane.setVisible(true);
         rightListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         rightListView1.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -511,19 +508,20 @@ public class Controller {
         rovers.remove(tempSelectedRoverPos);
         anchorPane.getChildren().removeAll(lines);
         lines.clear();
+        resizeRightAnchorPane(0, 0);
         deleting = false;
     }
 
     public void roverEditor(String name, String ID){
-        rovers.get(selectedRoverPos).name = name;
-        rovers.get(selectedRoverPos).ID = ID;
+        rovers.get(selectedRoverPos).setName(name);
+        rovers.get(selectedRoverPos).setID(ID);
         roverButtons.get(selectedRoverPos).setId(ID);
         dataDisplayWindow(selectedRoverPos, selectedRoverDataPos);
         leftListView.refresh();
 
     }
 
-    public void roverMaker(String name, String ID) throws IOException {
+    public void roverMaker(String name, String ID) {
 
         Rover rover = new Rover();
         rover.roverInsulator(name, ID);
@@ -555,7 +553,7 @@ public class Controller {
         roverButtons.add(button);
     }
 
-    public void roverDataUpdater(String data) throws IOException {
+    private void roverDataUpdater(String data) throws IOException {
         RoverData roverData = new RoverData();
         try{
             roverData.addData(data);
@@ -568,7 +566,7 @@ public class Controller {
 
 
                 alert.setTitle("New Rover Found!");
-                alert.setHeaderText("A new rover has been discovered: #" + roverData.ID);
+                alert.setHeaderText("A new rover has been discovered: #" + roverData.getID());
                 alert.setContentText("Do you want to add it?\n\nIf you press no this rover will be ignored unless manually added");
                 alertSetter(alert);
                 if (Objects.equals(alert.getResult().getText(), "Yes")){
@@ -583,9 +581,9 @@ public class Controller {
             }
             else {
 
-                if ((showLatestData && selectedRoverPos == pos) || rovers.get(pos).dataPosition == -1) {
+                if ((showLatestData && selectedRoverPos == pos) || rovers.get(pos).getDataPosition() == -1) {
                     rovers.get(pos).updateValues(roverData);
-                    selectedRoverDataPos = rovers.get(pos).dataPosition;
+                    selectedRoverDataPos = rovers.get(pos).getDataPosition();
                     handleButtonClick(pos);
                 }
                 else{
@@ -600,28 +598,28 @@ public class Controller {
         }
     }
 
-    public void allRoverRotationUpdater(){
+    private void allRoverRotationUpdater(){
         for(int i = 0; i < rovers.size(); i++){
             roverRotationUpdater(i);
         }
     }
 
-    public void roverRotationUpdater(int pos){
+    private void roverRotationUpdater(int pos){
         ImageView view = new ImageView(roverIcon);
         view.setFitWidth(roverButtons.get(pos).getPrefWidth());
         view.setFitHeight(roverButtons.get(pos).getPrefHeight());
-        view.setRotate(rovers.get(pos).roverData[rovers.get(pos).dataPosition].rotation);
+        view.setRotate(rovers.get(pos).getRoverData()[rovers.get(pos).getDataPosition()].getRotation());
         roverButtons.get(pos).setGraphic(view);
     }
 
 
-    public void allRoverPositionUpdater(){
+    private void allRoverPositionUpdater(){
         for(int i = 0; i < rovers.size(); i++){
             roverPositionUpdater(i);
         }
     }
 
-    public void roverPositionUpdater(int pos) {
+    private void roverPositionUpdater(int pos) {
         try {
             roverButtons.get(pos).setLayoutX((positionFinderX(pos, -1)) - 24);
             roverButtons.get(pos).setLayoutY((positionFinderY(pos, -1)) - 23);
@@ -632,16 +630,14 @@ public class Controller {
         if (selectedRoverPos == pos){
             linePath(pos);
         }
-
-
     }
 
-    public double positionFinderX(int pos, int tempDataPosition) {
+    private double positionFinderX(int pos, int tempDataPosition) {
         double roverX;
         if (tempDataPosition == -1) {
-            roverX = rovers.get(pos).roverData[rovers.get(pos).dataPosition].locationX;
+            roverX = rovers.get(pos).getRoverData()[rovers.get(pos).getDataPosition()].getLocationX();
         } else {
-            roverX = rovers.get(pos).roverData[tempDataPosition].locationX;
+            roverX = rovers.get(pos).getRoverData()[tempDataPosition].getLocationX();
         }
         double diff;
         double roverPos;
@@ -657,13 +653,13 @@ public class Controller {
         return (roverPos * scale) * mapScale;
     }
 
-    public double positionFinderY(int pos, int tempDataPosition){
+    private double positionFinderY(int pos, int tempDataPosition){
         double roverY;
         if (tempDataPosition == -1) {
-            roverY = rovers.get(pos).roverData[rovers.get(pos).dataPosition].locationY;
+            roverY = rovers.get(pos).getRoverData()[rovers.get(pos).getDataPosition()].getLocationY();
         }
         else{
-            roverY = rovers.get(pos).roverData[tempDataPosition].locationY;
+            roverY = rovers.get(pos).getRoverData()[tempDataPosition].getLocationY();
         }
         double diff;
         double roverPos;
@@ -679,8 +675,8 @@ public class Controller {
         return (roverPos * scale) * mapScale;
     }
 
-    public void linePath(int pos) {
-        int tempDataPosition = rovers.get(pos).dataPosition;
+    private void linePath(int pos) {
+        int tempDataPosition = rovers.get(pos).getDataPosition();
         anchorPane.getChildren().removeAll(lines);
         lines.clear();
         if(tempDataPosition != -1) {
@@ -698,7 +694,7 @@ public class Controller {
                     tempDataPosition = 0;
                 }
 
-                if (rovers.get(pos).roverData[tempDataPosition] == null) {
+                if (rovers.get(pos).getRoverData()[tempDataPosition] == null) {
                     break;
                 }
 
