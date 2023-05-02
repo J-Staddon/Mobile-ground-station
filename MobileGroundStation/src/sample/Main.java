@@ -43,11 +43,13 @@ class DataReceiver extends Task<String> {
 
 public class Main extends Application {
 
+    private Controller controller = new Controller();
+
     public static void main(String[] args) {
         launch(args);
     }
 
-    private void close(Stage stage, Controller controller) throws IOException {
+    private void close(Stage stage) throws IOException {
         ButtonType yes = new ButtonType("Yes");
         ButtonType no = new ButtonType("No");
         ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -73,12 +75,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        dataService dataService = new dataService();
+        DataService dataService = new DataService();
         dataService.start();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("fxmlFiles/sample.fxml"));
         Parent root = loader.load();
-        Controller controller = loader.getController();
+        controller = loader.getController();
 
         controller.valueProperty().bind(dataService.valueProperty());
 
@@ -104,10 +106,14 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(event -> {
             event.consume();
             try {
-                close(primaryStage, controller);
+                close(primaryStage);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    public Controller getController() {
+        return controller;
     }
 }

@@ -522,7 +522,6 @@ public class Controller {
     }
 
     public void roverMaker(String name, String ID) {
-
         Rover rover = new Rover();
         rover.roverInsulator(name, ID);
         rovers.add(rover);
@@ -561,10 +560,7 @@ public class Controller {
             if (pos == -1){
                 ButtonType yes = new ButtonType("Yes");
                 ButtonType no = new ButtonType("No");
-
                 Alert alert = new Alert(Alert.AlertType.NONE, "", yes, no);
-
-
                 alert.setTitle("New Rover Found!");
                 alert.setHeaderText("A new rover has been discovered: #" + roverData.getID());
                 alert.setContentText("Do you want to add it?\n\nIf you press no this rover will be ignored unless manually added");
@@ -580,7 +576,6 @@ public class Controller {
 
             }
             else {
-
                 if ((showLatestData && selectedRoverPos == pos) || rovers.get(pos).getDataPosition() == -1) {
                     rovers.get(pos).updateValues(roverData);
                     selectedRoverDataPos = rovers.get(pos).getDataPosition();
@@ -675,7 +670,7 @@ public class Controller {
         return (roverPos * scale) * mapScale;
     }
 
-    private void linePath(int pos) {
+    public void linePath(int pos) {
         int tempDataPosition = rovers.get(pos).getDataPosition();
         anchorPane.getChildren().removeAll(lines);
         lines.clear();

@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="minigeo-r6">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../../Java Libraries/minigeo-r6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Java Libraries/Apache POI/minigeo-r6.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$PROJECT_DIR$/../../../../Java Libraries/minigeo-r6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Java Libraries/Apache POI/minigeo-r6.jar!/" />
     </SOURCES>
   </library>
 </component>

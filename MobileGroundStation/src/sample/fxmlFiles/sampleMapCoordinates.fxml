@@ -6,26 +6,26 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="352.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ControllerMapCoordinates">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="352.0" prefWidth="415.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ControllerMapCoordinates">
    <children>
-      <Label alignment="CENTER" layoutX="7.0" layoutY="22.0" prefHeight="66.0" prefWidth="385.0" text="Map Coordinates" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0">
+      <Label alignment="CENTER" layoutX="-4.0" layoutY="22.0" prefHeight="66.0" prefWidth="401.0" text="Map Coordinates" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0">
          <font>
             <Font size="26.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="34.0" layoutY="119.0" prefHeight="31.0" prefWidth="148.0" text="Top left" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="218.0">
+      <Label alignment="CENTER" layoutX="51.0" layoutY="120.0" prefHeight="31.0" prefWidth="148.0" text="Top left" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="201.0">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <TextField fx:id="TLX" layoutX="34.0" layoutY="150.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="218.0" />
+      <TextField fx:id="TLX" layoutX="51.0" layoutY="150.0" prefHeight="25.0" prefWidth="149.0" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="215.0" />
       <Button fx:id="ConfirmButton" layoutX="141.0" layoutY="286.0" mnemonicParsing="false" onAction="#confirmButton" prefHeight="39.0" prefWidth="97.0" text="Confirm" AnchorPane.leftAnchor="141.0" AnchorPane.rightAnchor="139.0">
          <font>
             <Font size="21.0" />
          </font>
       </Button>
-      <TextField fx:id="TLY" layoutX="34.0" layoutY="176.0" />
-      <Label alignment="CENTER" layoutX="14.0" layoutY="173.0" prefHeight="31.0" prefWidth="19.0" text="Y">
+      <TextField fx:id="TLY" layoutX="50.0" layoutY="176.0" />
+      <Label alignment="CENTER" layoutX="2.0" layoutY="173.0" prefHeight="31.0" prefWidth="48.0" text="Lon">
          <font>
             <Font size="21.0" />
          </font>
@@ -35,34 +35,34 @@
             <Font size="21.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="14.0" layoutY="147.0" prefHeight="31.0" prefWidth="19.0" text="X">
+      <Label alignment="CENTER" layoutX="6.0" layoutY="147.0" prefHeight="31.0" prefWidth="40.0" text="Lat">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="237.0" layoutY="120.0" prefHeight="31.0" prefWidth="148.0" text="Bottom right">
+      <Label alignment="CENTER" layoutX="255.0" layoutY="120.0" prefHeight="31.0" prefWidth="148.0" text="Bottom right">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <TextField fx:id="BRX" layoutX="237.0" layoutY="151.0" />
-      <TextField fx:id="BRY" layoutX="237.0" layoutY="177.0" />
-      <Label alignment="CENTER" layoutX="217.0" layoutY="174.0" prefHeight="31.0" prefWidth="19.0" text="Y">
+      <TextField fx:id="BRX" layoutX="254.0" layoutY="151.0" />
+      <TextField fx:id="BRY" layoutX="254.0" layoutY="177.0" />
+      <Label alignment="CENTER" layoutX="207.0" layoutY="174.0" prefHeight="31.0" prefWidth="48.0" text="Lon">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="217.0" layoutY="148.0" prefHeight="31.0" prefWidth="19.0" text="X">
+      <Label alignment="CENTER" layoutX="215.0" layoutY="148.0" prefHeight="31.0" prefWidth="32.0" text="Lat">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="8.0" layoutY="62.0" prefHeight="66.0" prefWidth="385.0" text="Please enter the GPS coordiantes of the map" textFill="#5e5e5e">
+      <Label alignment="CENTER" layoutX="8.0" layoutY="62.0" prefHeight="66.0" prefWidth="401.0" text="Please enter the GPS coordiantes of the map" textFill="#5e5e5e">
          <font>
             <Font size="19.0" />
          </font>
       </Label>
-      <Button layoutX="111.0" layoutY="249.0" mnemonicParsing="false" onAction="#useCurrentCoordinates" prefHeight="30.0" prefWidth="178.0" text="Use current coordinates">
+      <Button layoutX="120.0" layoutY="243.0" mnemonicParsing="false" onAction="#useCurrentCoordinates" prefHeight="30.0" prefWidth="178.0" text="Use current coordinates">
          <font>
             <Font size="14.0" />
          </font>
