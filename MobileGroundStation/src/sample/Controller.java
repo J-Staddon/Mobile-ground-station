@@ -256,7 +256,6 @@ public class Controller {
     }
 
     public void handleChangeMapButton(){
-
         if (!pause) {
             final FileChooser fileChooser = new FileChooser();
             try {
