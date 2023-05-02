@@ -7,5 +7,5 @@ public class DataService extends ScheduledService<String> {
     @Override
     protected Task<String> createTask() {
         return new DataReceiver();
-    }
+    } //Creates new receiver
 }
