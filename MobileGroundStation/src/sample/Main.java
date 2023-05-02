@@ -75,7 +75,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        DataService dataService = new DataService();
+        dataService dataService = new dataService();
         dataService.start();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("fxmlFiles/sample.fxml"));
