@@ -17,9 +17,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.Objects;
 
-//VM:     --module-path ${PATH_TO_FX} --add-modules javafx.controls,javafx.fxml
-
-
 /**
  * To receive and send strings of data to the controller
  *
