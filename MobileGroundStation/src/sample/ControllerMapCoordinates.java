@@ -9,6 +9,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+
+/**
+ * Controls change map stage
+ *
+ * @author Jay Staddon
+ * @version 4th May 2023
+ */
 public class ControllerMapCoordinates {
 
     @FXML
@@ -19,7 +26,9 @@ public class ControllerMapCoordinates {
     public Label errorMessage;
     private Controller controller;
 
-
+    /**
+     * Runs when controller is made
+     */
     public void initialize(){
         TLX.textProperty().addListener(new boxListener(TLX));
         TLY.textProperty().addListener(new boxListener(TLY));
@@ -27,7 +36,13 @@ public class ControllerMapCoordinates {
         BRY.textProperty().addListener(new boxListener(BRY));
     }
 
+    /**
+     * Sets new GPS coordinates
+     *
+     * @param actionEvent Action
+     */
     public void confirmButton(ActionEvent actionEvent){
+        //Error checks
         if (!TLX.getText().trim().isEmpty() && !TLY.getText().trim().isEmpty() && !BRX.getText().trim().isEmpty() && !BRY.getText().trim().isEmpty()) {
 
             try{
@@ -47,6 +62,9 @@ public class ControllerMapCoordinates {
         else{errorMessage.setText("All boxes require a number");}
     }
 
+    /**
+     * Sets to the coordinates to the existing ones
+     */
     public void useCurrentCoordinates(){
         TLX.setText(String.valueOf(controller.topLeftX));
         TLY.setText(String.valueOf(controller.topLeftY));
@@ -54,16 +72,32 @@ public class ControllerMapCoordinates {
         BRY.setText(String.valueOf(controller.bottomRightY));
     }
 
-
+    /**
+     * Sets parent controller
+     *
+     * @param controller Parent controller
+     */
     public void setParentController(Controller controller){
         this.controller = controller;
     }
 }
 
+
+/**
+ * Listener for text fields
+ *
+ * @author Jay Staddon
+ * @version 4th May 2023
+ */
 class boxListener implements ChangeListener<String> {
 
     private final TextField textField;
 
+    /**
+     * Restricts inputs to numbers, dots and dashes
+     *
+     * @param textField The text field
+     */
     public boxListener(TextField textField) {
         this.textField = textField;
     }

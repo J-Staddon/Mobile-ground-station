@@ -8,9 +8,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import java.io.IOException;
 
-
+/**
+ * Controls new rover stage
+ *
+ * @author Jay Staddon
+ * @version 4th May 2023
+ */
 public class ControllerNewRover {
 
     @FXML
@@ -21,7 +25,11 @@ public class ControllerNewRover {
     public AnchorPane anchorPane;
     private Controller controller;
 
+    /**
+     * Runs when controller is made
+     */
     public void initialize(){
+        //Only allow numbers to be inputted int ID
         idTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 idTextField.setText(newValue.replaceAll("[^\\d]", ""));
@@ -29,7 +37,13 @@ public class ControllerNewRover {
         });
     }
 
+    /**
+     * Creates a new rover
+     *
+     * @param actionEvent Action
+     */
     public void create(ActionEvent actionEvent) {
+        //Error checks
         if (!nameTextField.getText().trim().isEmpty() && !idTextField.getText().trim().isEmpty()) {
             if(nameTextField.getText().length() < 10) {
                 if(idTextField.getText().length() == 4) {
@@ -42,7 +56,7 @@ public class ControllerNewRover {
                         }
                     }
                     if (!IDinUse) {
-                        controller.roverMaker(nameTextField.getText(), idTextField.getText());
+                        controller.roverMaker(nameTextField.getText(), idTextField.getText()); //Make new rover
                         Node n = (Node) actionEvent.getSource();
                         Stage stage = (Stage) n.getScene().getWindow();
                         stage.close();
@@ -55,6 +69,11 @@ public class ControllerNewRover {
         else{errorMessage.setText("Both boxes require text");}
     }
 
+    /**
+     * Sets parent controller
+     *
+     * @param controller Parent controller
+     */
     public void setParentController(Controller controller){
         this.controller = controller;
     }

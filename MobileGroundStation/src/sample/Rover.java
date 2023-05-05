@@ -2,6 +2,12 @@ package sample;
 
 import java.io.PrintWriter;
 
+/**
+ * Rover class
+ *
+ * @author Jay Staddon
+ * @version 4th May 2023
+ */
 public class Rover {
 
     private RoverData[] roverData = new RoverData[100];
@@ -9,6 +15,11 @@ public class Rover {
     private String name;
     private String ID;
 
+    /**
+     * Saves to file
+     *
+     * @param pw Writes to file
+     */
     public void saver(PrintWriter pw){
         pw.println(name);
         pw.println(ID);
@@ -22,11 +33,22 @@ public class Rover {
         }
     }
 
+    /**
+     * Creates rover
+     *
+     * @param sentName Rover name
+     * @param id Rover ID
+     */
     public void roverInsulator(String sentName, String id) {
         name = sentName;
         ID = id;
     }
 
+    /**
+     * Updates the data array
+     *
+     * @param data new data
+     */
     public void updateValues(RoverData data) {
         RoverData[] tempRoverData;
         tempRoverData = roverData;
@@ -41,6 +63,7 @@ public class Rover {
             dataPlaced = true;
         }
         else {
+            //Reorders the array into the correct order
             for (int i = 0; i < 100; i++) {
                 tempDataPosition = dataPositionNum- i;
                 newTempDataPosition = tempDataPosition + 1;
@@ -63,7 +86,7 @@ public class Rover {
                     tempRoverData[tempDataPosition] = roverData[tempDataPosition];
                 }
                 else if (data.getDate().compareTo(roverData[tempDataPosition].getDate()) == 0){
-                    if (data.getTime().compareTo(roverData[tempDataPosition].getTime()) >= 0) { //If newData >= roverData
+                    if (data.getTime().compareTo(roverData[tempDataPosition].getTime()) >= 0) {
                         tempRoverData[newTempDataPosition] = data;
                         dataPosition++;
                         dataPlaced = true;
@@ -75,7 +98,7 @@ public class Rover {
                         tempRoverData[newTempDataPosition] = roverData[tempDataPosition];
                     }
                 }
-                else if (data.getDate().compareTo(roverData[tempDataPosition].getDate()) > 0) { //If newData > roverData
+                else if (data.getDate().compareTo(roverData[tempDataPosition].getDate()) > 0) {
                     tempRoverData[newTempDataPosition] = data;
                     dataPosition++;
                     dataPlaced = true;
@@ -98,7 +121,6 @@ public class Rover {
         }
         roverData = tempRoverData;
     }
-
 
     public RoverData[] getRoverData() {
         return roverData;

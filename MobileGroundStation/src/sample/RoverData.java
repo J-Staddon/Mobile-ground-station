@@ -1,11 +1,15 @@
 package sample;
 
-//import sun.management.Sensor;
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Rover data class
+ *
+ * @author Jay Staddon
+ * @version 4th May 2023
+ */
 public class RoverData {
 
     private String date;
@@ -18,7 +22,11 @@ public class RoverData {
     private double rotation;
     private String message = "";
 
-
+    /**
+     * Saves to file
+     *
+     * @param pw Writes to file
+     */
     public void saver(PrintWriter pw){
         pw.print('D');
         pw.print(date);
@@ -50,6 +58,12 @@ public class RoverData {
         pw.println(message);
     }
 
+    /**
+     * Creates new piece of data
+     *
+     * @param receivedData New data string
+     * @return If successful return true
+     */
     public boolean addData(String receivedData){
         try (Scanner infile = new Scanner(receivedData);) {
             infile.useDelimiter("\r?#|\r");
@@ -95,13 +109,22 @@ public class RoverData {
         return false;
     }
 
-
+    /**
+     * Formats date
+     *
+     * @return Formatted data
+     */
     public String getDateFormatted(){
         char[] arr = date.toCharArray();
         char[] arr2 = {arr[6], arr[7], '/', arr[4], arr[5], '/', arr[0], arr[1], arr[2], arr[3]};
         return String.valueOf(arr2);
     }
 
+    /**
+     * Formats time
+     *
+     * @return Formatted time
+     */
     public String getTimeFormatted() {
         char[] arr = time.toCharArray();
         char[] arr2 = {arr[0], arr[1], ':', arr[2], arr[3], ':', arr[4], arr[5]};

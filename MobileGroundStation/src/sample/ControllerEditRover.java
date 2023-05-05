@@ -6,10 +6,14 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.util.Objects;
 
-
+/**
+ * Controls edit rover stage
+ *
+ * @author Jay Staddon
+ * @version 4th May 2023
+ */
 public class ControllerEditRover {
     @FXML
     public Button saveButton;
@@ -19,8 +23,11 @@ public class ControllerEditRover {
     public AnchorPane anchorPane;
     private Controller controller;
 
+    /**
+     * Runs when controller is made
+     */
     public void initialize(){
-
+        //Only allow numbers to be inputted int ID
         idTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 idTextField.setText(newValue.replaceAll("[^\\d]", ""));
@@ -28,7 +35,13 @@ public class ControllerEditRover {
         });
     }
 
-    public void save(ActionEvent actionEvent) throws IOException {
+    /**
+     * Saves new rover name and ID
+     *
+     * @param actionEvent Action
+     */
+    public void save(ActionEvent actionEvent) {
+        //Error checks
         if (!nameTextField.getText().trim().isEmpty() && !idTextField.getText().trim().isEmpty()) {
             if(nameTextField.getText().length() < 10) {
                 if(idTextField.getText().length() == 4) {
@@ -44,7 +57,7 @@ public class ControllerEditRover {
                         }
                     }
                     if(!IDinUse) {
-                        controller.roverEditor(nameTextField.getText(), idTextField.getText());
+                        controller.roverEditor(nameTextField.getText(), idTextField.getText()); //Updates rover name and  ID
                         Node n = (Node) actionEvent.getSource();
                         Stage stage = (Stage) n.getScene().getWindow();
                         stage.close();
@@ -57,7 +70,13 @@ public class ControllerEditRover {
         else{errorMessage.setText("Both boxes require text");}
     }
 
+    /**
+     * Deletes a rover
+     *
+     * @param actionEvent Action
+     */
     public void handleDeleteButton(ActionEvent actionEvent) {
+        //Warns user they are deleting a rover
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Deleting Rover");
         alert.setHeaderText("Deleting Rover");
@@ -72,6 +91,11 @@ public class ControllerEditRover {
         }
     }
 
+    /**
+     * Sets parent controller
+     *
+     * @param controller Parent controller
+     */
     public void setParentController(Controller controller){
         this.controller = controller;
     }

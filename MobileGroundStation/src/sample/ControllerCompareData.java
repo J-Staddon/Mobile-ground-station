@@ -1,18 +1,13 @@
 package sample;
 
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -20,14 +15,17 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * Controls compare data stage
+ *
+ * @author Jay Staddon
+ * @version 4th May 2023
+ */
 public class ControllerCompareData {
     @FXML
     public AnchorPane anchorPane;
@@ -40,8 +38,14 @@ public class ControllerCompareData {
     public TableView<String[]> tableOfDataRight;
     private Controller controller;
 
-
+    /**
+     * Updates the data in the table
+     *
+     * @param rover Rover
+     * @param table Table of data
+     */
     public void tableUpdater(Rover rover, TableView<String[]> table) {
+        //Empties table
         table.getColumns().clear();
         table.getItems().clear();
 
@@ -52,6 +56,7 @@ public class ControllerCompareData {
         int sensorTableSize = 0;
         int amountOfData = 0;
 
+        //Gets amount of data rover has
         for (int i = 0; i < 100; i++) {
             if (rover.getRoverData()[i] != null) {
                 if (rover.getRoverData()[i].getSensors().size() > sensorTableSize) {
@@ -61,6 +66,7 @@ public class ControllerCompareData {
             }
         }
 
+        //Sets sensor column headings
         for (arrayPosition = 0; arrayPosition < sensorTableSize; arrayPosition++) {
             TableColumn<String[],String> sensorColumn = new TableColumn("Sensor " + (arrayPosition + 1));
             table.getColumns().add(sensorColumn);
@@ -73,6 +79,7 @@ public class ControllerCompareData {
 
         int tempDataPosition;
         for (int i = 0; i < amountOfData; i++) {
+            //Adds data to table
             String[] dataArray = new String[100];
             tempDataPosition = rover.getDataPosition() - i;
             if (tempDataPosition < 0) {
@@ -96,8 +103,8 @@ public class ControllerCompareData {
             arrayDataPosition++;
         }
 
-
-    TableColumn<String[],String> IDColumn = new TableColumn("ID");
+        //Sets column headings
+        TableColumn<String[],String> IDColumn = new TableColumn("ID");
         TableColumn<String[],String> nameColumn = new TableColumn("Name");
         TableColumn<String[],String> batteryColumn = new TableColumn("Battery");
         TableColumn<String[],String> dateColumn = new TableColumn("Date");
@@ -159,17 +166,20 @@ public class ControllerCompareData {
         table.getItems().addAll(Arrays.asList(data));
     }
 
-
+    /**
+     * Removes a table
+     */
     public void viewOneRover(){
         menuSetter(roverMenuLeft, tableOfDataLeft);
         roverMenuRight.setVisible(false);
         roverMenuLeft.setVisible(true);
         tableOfData.setVisible(true);
-//        exportLeftButton.setVisible(true);
         exportRightButton.setVisible(false);
-
     }
 
+    /**
+     * Adds a table
+     */
     public void viewTwoRovers(){
         menuSetter(roverMenuLeft, tableOfDataLeft);
         menuSetter(roverMenuRight, tableOfDataRight);
@@ -183,6 +193,12 @@ public class ControllerCompareData {
         }
     }
 
+    /**
+     * Updates roverMenu to have all the rovers
+     *
+     * @param roverMenu List of rovers
+     * @param table Table of data
+     */
     public void menuSetter(MenuButton roverMenu, TableView<String[]> table){
         roverMenu.getItems().clear();
         List<MenuItem> menuItemList = new ArrayList<>();
@@ -205,6 +221,11 @@ public class ControllerCompareData {
         roverMenu.getItems().addAll(menuItemList);
     }
 
+    /**
+     * Exports table of data to Excel
+     *
+     * @param event Action
+     */
     public void exportToExcel(ActionEvent event) {
         Workbook workbook = new HSSFWorkbook();
         Sheet sheet = workbook.createSheet();
@@ -220,6 +241,7 @@ public class ControllerCompareData {
             menu = roverMenuRight;
         }
 
+        //Adds table data to sheet
         for (int i = 0; i < table.getColumns().size(); i++) {
             row.createCell(i).setCellValue(table.getColumns().get(i).getText());
         }
@@ -235,6 +257,7 @@ public class ControllerCompareData {
             }
         }
 
+        //Lets the user save the file
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Files", "*.xls"));
@@ -244,14 +267,19 @@ public class ControllerCompareData {
         try {
             roverDataSheet.createNewFile();
             FileOutputStream saveFile = new FileOutputStream(roverDataSheet, false);
-            workbook.write(saveFile);
+            workbook.write(saveFile); //Adds data to new Excel document
             saveFile.close();
-            Desktop.getDesktop().open(roverDataSheet);
+            Desktop.getDesktop().open(roverDataSheet); //Opens new document
         }catch (Exception e){
             System.err.println("Export Error");
         }
     }
 
+    /**
+     * Sets parent controller
+     *
+     * @param controller Parent controller
+     */
     public void setParentController(Controller controller){
         this.controller = controller;
     }

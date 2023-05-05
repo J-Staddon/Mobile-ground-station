@@ -20,19 +20,30 @@ import java.util.Objects;
 //VM:     --module-path ${PATH_TO_FX} --add-modules javafx.controls,javafx.fxml
 
 
+/**
+ * To receive and send strings of data to the controller
+ *
+ * @author Jay Staddon
+ * @version 4th May 2023
+ */
+
 class DataReceiver extends Task<String> {
     @Override
+
+    /**
+     * Reads data and sends it to rover
+     */
     protected String call() throws Exception {
         try {
             DatagramSocket datasoc = new DatagramSocket(3000);
             byte[] buff = new byte[1024];
             DatagramPacket dpac = new DatagramPacket(buff, 1024);
-            datasoc.receive(dpac);
+            datasoc.receive(dpac); //Wait to receive data packet on port 3000
             System.out.println("Data Received");
-            String strn = new String(dpac.getData(), 0, dpac.getLength());
+            String strn = new String(dpac.getData(), 0, dpac.getLength()); //Sets variable to data
             System.out.println("Data: " + strn);
             datasoc.close();
-            return strn;
+            return strn; //Returns gathered data
         }
         catch (Exception e){}
         System.out.println("Closing Thread");
@@ -40,7 +51,12 @@ class DataReceiver extends Task<String> {
     }
 }
 
-
+/**
+ * Launches the program
+ *
+ * @author Jay Staddon
+ * @version 4th May 2023
+ */
 public class Main extends Application {
 
     private Controller controller = new Controller();
@@ -49,6 +65,11 @@ public class Main extends Application {
         launch(args);
     }
 
+    /**
+     * Provides a close menu to the user
+     * @param stage The main stage open
+     * @throws IOException
+     */
     private void close(Stage stage) throws IOException {
         ButtonType yes = new ButtonType("Yes");
         ButtonType no = new ButtonType("No");
@@ -71,18 +92,21 @@ public class Main extends Application {
         }
     }
 
-
+    /**
+     * Starts the main stage#
+     * @param primaryStage Receives the existing stage
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        dataService dataService = new dataService();
+        DataService dataService = new DataService();
         dataService.start();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxmlFiles/sample.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxmlFiles/sample.fxml")); //Sets stage
         Parent root = loader.load();
         controller = loader.getController();
 
-        controller.valueProperty().bind(dataService.valueProperty());
+        controller.valueProperty().bind(dataService.valueProperty()); //Connects controllers valueProperty variable and dataService valueProperty variable
 
         primaryStage.setTitle("Mobile Ground Station");
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("images/programIcon.png")));
@@ -90,6 +114,7 @@ public class Main extends Application {
         primaryStage.setMinHeight(300);
         primaryStage.setMinWidth(400);
 
+        //Listens if CTRL is pressed down
         primaryStage.getScene().setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.CONTROL) {
                 controller.zoomKey = true;
@@ -103,6 +128,8 @@ public class Main extends Application {
         });
 
         primaryStage.show();
+
+        //When closing call 'close'
         primaryStage.setOnCloseRequest(event -> {
             event.consume();
             try {
@@ -113,6 +140,10 @@ public class Main extends Application {
         });
     }
 
+    /**
+     * Returns the controller to the program
+     * @return controller
+     */
     public Controller getController() {
         return controller;
     }

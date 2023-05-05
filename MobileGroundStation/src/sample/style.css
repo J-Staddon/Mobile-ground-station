@@ -1,4 +1,5 @@
 .listViewLabels .scroll-bar:vertical {
+    /* Hides scroll bar */
     -fx-padding: -10;
     -fx-opacity: 0;
 }

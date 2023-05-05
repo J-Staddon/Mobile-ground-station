@@ -25,9 +25,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * Controls main stage
+ *
+ * @author Jay Staddon
+ * @version 4th May 2023
+ */
 public class Controller {
     Image roverIcon = new Image(getClass().getResourceAsStream("images/roverIcon.png"));
-    Image map = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
+    Image map = new Image(getClass().getResourceAsStream("images/map.jpg"));
     Image tempMap;
     String mapFileLocation;
     String tempMapFileLocation;
@@ -53,6 +59,7 @@ public class Controller {
     public Button forwardDataButton;
     public Button backDataButton;
 
+    //GPS coordinates of map
     double topLeftX;
     double topLeftY;
     double bottomRightX;
@@ -75,15 +82,22 @@ public class Controller {
 
     private StringProperty valueProperty = new SimpleStringProperty("");
 
+    /**
+     * @return data string
+     */
     public StringProperty valueProperty() { return this.valueProperty; }
 
+    /**
+     * Runs when controller is made
+     */
     public void initialize() {
         loader();
         setMap(topLeftX, topLeftY, bottomRightX, bottomRightY);
         allRoverRotationUpdater();
 
-        resizeRightAnchorPane(0, 0);
+        resizeRightAnchorPane(0, 0); //Closes rover data display
 
+        //Handles zooming with mouse wheel
         scrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
             if (zoomKey) {
                 double deltaY = event.getDeltaY();
@@ -96,6 +110,7 @@ public class Controller {
             }
                 });
 
+        //Listens for new data string
         valueProperty.addListener((observable, oldValue, newValue) -> {
             if(newValue != null){
                 try {roverDataUpdater(newValue);}
@@ -104,6 +119,9 @@ public class Controller {
         });
     }
 
+    /**
+     * Loads in save file
+     */
     private void loader(){
         System.out.println(new File("saveData").getAbsolutePath());
         try (Scanner infile = new Scanner(new FileReader(infileName));) {
@@ -112,7 +130,7 @@ public class Controller {
                 tempMapFileLocation = infile.next();
                 tempMap = new Image(tempMapFileLocation);
             } catch (Exception e){
-                tempMap = new Image(getClass().getResourceAsStream("images/testMap.jpg"));
+                tempMap = new Image(getClass().getResourceAsStream("images/map.jpg")); //Default map
                 System.err.println("Could not find a saved map");
             }
             topLeftX = infile.nextDouble();
@@ -120,6 +138,8 @@ public class Controller {
             bottomRightX = infile.nextDouble();
             bottomRightY = infile.nextDouble();
             int numOfRoversToAdd = infile.nextInt();
+
+            //Adds rovers to program
             for (int i = 0; numOfRoversToAdd > i; i++){
                 String name = infile.next();
                 String ID = infile.next();
@@ -137,6 +157,11 @@ public class Controller {
         }
     }
 
+    /**
+     * Saves to file
+     *
+     * @throws IOException
+     */
     public void saver() throws IOException {
         try (FileWriter fw = new FileWriter(infileName);
              BufferedWriter bw = new BufferedWriter(fw);
@@ -153,15 +178,20 @@ public class Controller {
         }
     }
 
+    /**
+     * Locates the position of a rover in the ArrayList
+     *
+     * @param ID Rover ID
+     * @return Rover position
+     */
     private int findRoverPos(String ID){
-
         for(int i = 0; 0 < rovers.size(); i++){
             try {
                 if (rovers.get(i).getID().equals(ID)) {
                     return i;
                 }
             }catch (Exception e){
-                for (int x = 0; x < ignoreIDList.size(); x++){
+                for (int x = 0; x < ignoreIDList.size(); x++){ //Checks if rover ID is ignored
                     if (ignoreIDList.get(x).equals(ID)){
                         return -2;
                     }
@@ -172,20 +202,31 @@ public class Controller {
         return -1;
     }
 
+    /**
+     * Runs when rover is clicked
+     *
+     * @param pos Position of rover in ArrayList
+     */
     public void handleButtonClick(int pos) {
         if (!pause) {
             if (selectedRoverPos < rovers.size() && selectedRoverPos != -1) {
-                roverButtons.get(selectedRoverPos).setBorder(Border.EMPTY);
+                roverButtons.get(selectedRoverPos).setBorder(Border.EMPTY); //Removes button border
             }
             selectedRoverPos = pos;
             selectedRoverDataPos = rovers.get(selectedRoverPos).getDataPosition();
-            roverButtons.get(selectedRoverPos).setBorder(Border.stroke(Paint.valueOf("#000000")));
+            roverButtons.get(selectedRoverPos).setBorder(Border.stroke(Paint.valueOf("#000000"))); //Sets button border
             roverButtons.get(selectedRoverPos).toFront();
-            linePath(pos);
-            dataDisplayWindow(selectedRoverPos, rovers.get(selectedRoverPos).getDataPosition());
+            linePath(pos); //Displays rovers travelled path
+            dataDisplayWindow(selectedRoverPos, rovers.get(selectedRoverPos).getDataPosition()); //Displays rover data
         }
     }
 
+    /**
+     * Creates a new stage
+     *
+     * @param root FXML of new stage
+     * @param newStage The new stage
+     */
     private void stageSetter(Parent root, Stage newStage) {
         newStage.setScene(new Scene(root));
         newStage.toFront();
@@ -193,6 +234,8 @@ public class Controller {
         Stage window = (Stage) anchorPane.getScene().getWindow();
         newStage.initOwner(window);
         newStage.show();
+
+        //Centres stage on main window
         newStage.setX(window.getX()+((window.getWidth() - newStage.getWidth()) / 2));
         newStage.setY(window.getY()+((window.getHeight() - newStage.getHeight()) / 2));
 
@@ -202,6 +245,11 @@ public class Controller {
         stage.showAndWait();
     }
 
+    /**
+     * Sets the alert to centre of screen
+     *
+     * @param alert The new alert
+     */
     public void alertSetter(Alert alert) {
         Stage window = (Stage) anchorPane.getScene().getWindow();
         alert.initOwner(window);
@@ -210,6 +258,10 @@ public class Controller {
         alert.showAndWait();
     }
 
+    /**
+     * Runs when new rover button is clicked
+     * Opens new rover menu
+     */
     public void handleNewRoverButton(){
         if (!pause) {
             pause = true;
@@ -233,6 +285,10 @@ public class Controller {
         }
     }
 
+    /**
+     * Runs when edit rover button is clicked
+     * Opens edit rover menu
+     */
     public void handleEditButton() {
         if (!pause) {
             pause = true;
@@ -255,10 +311,15 @@ public class Controller {
         }
     }
 
+    /**
+     * Runs when change map button is clicked
+     * Opens change map menu
+     */
     public void handleChangeMapButton(){
         if (!pause) {
             final FileChooser fileChooser = new FileChooser();
             try {
+                //Opens files so image can be chosen
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
                 Stage stage = (Stage) anchorPane.getScene().getWindow();
                 File file = fileChooser.showOpenDialog(stage);
@@ -290,8 +351,11 @@ public class Controller {
         }
     }
 
+    /**
+     * Runs when compare data button is clicked
+     * Opens compare data window
+     */
     public void handleCompareDataButton() {
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("fxmlFiles/sampleCompareData.fxml"));
             Parent root = loader.load();
@@ -306,10 +370,17 @@ public class Controller {
 
         } catch (Exception e) {
             System.err.println("Compare Data Error");
-
         }
     }
 
+    /**
+     * Sets map to new image
+     *
+     * @param TLX Top left X
+     * @param TLY Top left Y
+     * @param BRX Bottom right X
+     * @param BRY Bottom right y
+     */
     public void setMap(double TLX, double TLY, double BRX, double BRY){
         map = tempMap;
         mapFileLocation = tempMapFileLocation;
@@ -326,6 +397,9 @@ public class Controller {
         allRoverPositionUpdater();
     }
 
+    /**
+     * Enlarges the map
+     */
     public void handleZoomIn(){
         if(mapScale < 0.5f) {
             mapScale = mapScale + 0.1f;
@@ -343,6 +417,9 @@ public class Controller {
         allRoverPositionUpdater();
     }
 
+    /**
+     * Shrinks the map
+     */
     public void handleZoomOut(){
         if(mapScale > 0.5f) {
             mapScale = mapScale - 0.5f;
@@ -360,8 +437,12 @@ public class Controller {
         allRoverPositionUpdater();
     }
 
+    /**
+     * Goes backwards on data display
+     */
     public void handleBackDataButton(){
         if (!showLatestData) {
+            //Finds front of array
             int tempSelectedRoverDataPos = selectedRoverDataPos;
             if (selectedRoverDataPos == 0) {
                 tempSelectedRoverDataPos = 99;
@@ -370,11 +451,14 @@ public class Controller {
             }
             if (rovers.get(selectedRoverPos).getRoverData()[tempSelectedRoverDataPos] != null && rovers.get(selectedRoverPos).getDataPosition() != tempSelectedRoverDataPos) {
                 selectedRoverDataPos = tempSelectedRoverDataPos;
-                dataDisplayWindow(selectedRoverPos, selectedRoverDataPos);
+                dataDisplayWindow(selectedRoverPos, selectedRoverDataPos); //Update data display
             }
         }
     }
 
+    /**
+     * Goes forward on data display
+     */
     public void handleForwardDataButton() {
         if (!showLatestData) {
             if (selectedRoverDataPos != rovers.get(selectedRoverPos).getDataPosition()) {
@@ -390,6 +474,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Sets if latest data item should be instantly shown
+     */
     public void handleShowLatestData(){
         if(showLatestData){
             showLatestData = false;
@@ -397,12 +484,17 @@ public class Controller {
         else{
             showLatestData = true;
             selectedRoverDataPos = rovers.get(selectedRoverPos).getDataPosition();
-            dataDisplayWindow(selectedRoverPos, selectedRoverDataPos);
+            dataDisplayWindow(selectedRoverPos, selectedRoverDataPos); //Displays latest data item
         }
     }
 
-    public void roverSelectPanel(int position){
-        leftListView.getItems().add(rovers.get(position));
+    /**
+     * Adds rovers to left hand list
+     *
+     * @param pos Rover position in ArrayList
+     */
+    public void roverSelectPanel(int pos){
+        leftListView.getItems().add(rovers.get(pos));
         leftListView.setCellFactory(lv -> new ListCell<Rover>(){
              @Override
              public void updateItem(Rover rover, boolean empty) {
@@ -411,11 +503,12 @@ public class Controller {
              }
         });
 
+        //Listen to if a rover is selected
         leftListView.getSelectionModel().selectedItemProperty().addListener((observableValue, rover, target) -> {
             if (!deleting) {
                 if (currentView != target) {
                     if (!pause) {
-                        handleButtonClick(findRoverPos(leftListView.getSelectionModel().getSelectedItem().getID()));
+                        handleButtonClick(findRoverPos(leftListView.getSelectionModel().getSelectedItem().getID())); //Selects rover
                         currentView = leftListView.getSelectionModel().getSelectedItem();
                     }
                 }
@@ -423,12 +516,25 @@ public class Controller {
         });
     }
 
+    /**
+     * Resizes the data display
+     *
+     * @param min Data display min size
+     * @param max Dat display max size
+     */
     private void resizeRightAnchorPane(int min, int max){
         rightAnchorPane.setMinWidth(min);
         rightAnchorPane.setMaxWidth(max);
     }
 
+    /**
+     * Updates the data display
+     *
+     * @param pos Rover position in ArrayList
+     * @param dataPos Rover data position in array
+     */
     public void dataDisplayWindow(int pos, int dataPos){
+        //Links listviews to scroll together
         ScrollBar scrollBar1 = (ScrollBar) rightListView.lookup(".scroll-bar:vertical");
         ScrollBar scrollBar2 = (ScrollBar) rightListView1.lookup(".scroll-bar:vertical");
         scrollBar1.valueProperty().bindBidirectional(scrollBar2.valueProperty());
@@ -456,7 +562,7 @@ public class Controller {
                 rightListView1.getItems().add("Sensor " + (i + 1));
             }
 
-
+            //Sets tables to data
             String date = tempRoverData.getDateFormatted();
             String time = tempRoverData.getTimeFormatted();
 
@@ -478,6 +584,7 @@ public class Controller {
             }
         }
         catch (Exception e){
+            //If no data found display error
             System.err.println("Rover Display Data Error");
             rightListView.setVisible(false);
             rightListView1.setVisible(false);
@@ -497,6 +604,11 @@ public class Controller {
         rightListView1.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
+    /**
+     * Deletes a rover from the program
+     *
+     * @param tempSelectedRoverPos The position in ArrayList of the rover to be deleted
+     */
     public void roverDeleter(int tempSelectedRoverPos){
         deleting = true;
         leftListView.getSelectionModel().clearSelection();
@@ -507,19 +619,30 @@ public class Controller {
         rovers.remove(tempSelectedRoverPos);
         anchorPane.getChildren().removeAll(lines);
         lines.clear();
-        resizeRightAnchorPane(0, 0);
+        resizeRightAnchorPane(0, 0); //Hides data display
         deleting = false;
     }
 
+    /**
+     * Changes rover name and ID
+     *
+     * @param name New rover name
+     * @param ID New rover ID
+     */
     public void roverEditor(String name, String ID){
         rovers.get(selectedRoverPos).setName(name);
         rovers.get(selectedRoverPos).setID(ID);
         roverButtons.get(selectedRoverPos).setId(ID);
         dataDisplayWindow(selectedRoverPos, selectedRoverDataPos);
         leftListView.refresh();
-
     }
 
+    /**
+     * Constructs a new rover
+     *
+     * @param name Rover name
+     * @param ID Rover ID
+     */
     public void roverMaker(String name, String ID) {
         Rover rover = new Rover();
         rover.roverInsulator(name, ID);
@@ -528,11 +651,16 @@ public class Controller {
         roverSelectPanel(findRoverPos(ID));
     }
 
+    /**
+     * Makes new rover button
+     *
+     * @param ID Rover ID
+     */
     private void roverButtonMaker(String ID){
         Button button;
         button = new Button();
         button.setId(ID);
-        button.setOnAction(e -> handleButtonClick(findRoverPos(button.getId())));
+        button.setOnAction(e -> handleButtonClick(findRoverPos(button.getId()))); //Sets action when clicked
 
         button.setPrefWidth(30);
         button.setPrefHeight(30);
@@ -546,17 +674,26 @@ public class Controller {
 
         anchorPane.getChildren().add(button);
 
+        //Hides rover until data received
         button.setLayoutX(-100);
         button.setLayoutY(-100);
         roverButtons.add(button);
     }
 
+    /**
+     * Handles new rover data
+     *
+     * @param data New data string
+     * @throws IOException
+     */
     private void roverDataUpdater(String data) throws IOException {
         RoverData roverData = new RoverData();
         try{
             roverData.addData(data);
             int pos = findRoverPos(roverData.getID());
+            //If rover does not exist
             if (pos == -1){
+                //Prompt user to add rover
                 ButtonType yes = new ButtonType("Yes");
                 ButtonType no = new ButtonType("No");
                 Alert alert = new Alert(Alert.AlertType.NONE, "", yes, no);
@@ -574,6 +711,7 @@ public class Controller {
                 }
 
             }
+            //Update existing rover
             else {
                 if ((showLatestData && selectedRoverPos == pos) || rovers.get(pos).getDataPosition() == -1) {
                     rovers.get(pos).updateValues(roverData);
@@ -592,12 +730,20 @@ public class Controller {
         }
     }
 
+    /**
+     * Check all rover rotations
+     */
     private void allRoverRotationUpdater(){
         for(int i = 0; i < rovers.size(); i++){
             roverRotationUpdater(i);
         }
     }
 
+    /**
+     * Rotates a rover
+     *
+     * @param pos Rover position in ArrayList
+     */
     private void roverRotationUpdater(int pos){
         ImageView view = new ImageView(roverIcon);
         view.setFitWidth(roverButtons.get(pos).getPrefWidth());
@@ -606,13 +752,20 @@ public class Controller {
         roverButtons.get(pos).setGraphic(view);
     }
 
-
+    /**
+     * Check all rover positions
+     */
     private void allRoverPositionUpdater(){
         for(int i = 0; i < rovers.size(); i++){
             roverPositionUpdater(i);
         }
     }
 
+    /**
+     * Positions a rover
+     *
+     * @param pos Rover position in ArrayList
+     */
     private void roverPositionUpdater(int pos) {
         try {
             roverButtons.get(pos).setLayoutX((positionFinderX(pos, -1)) - 24);
@@ -626,6 +779,13 @@ public class Controller {
         }
     }
 
+    /**
+     * Finds X coordinate
+     *
+     * @param pos Rover position in ArrayList
+     * @param tempDataPosition Temporary rover position in ArrayList
+     * @return X position
+     */
     private double positionFinderX(int pos, int tempDataPosition) {
         double roverX;
         if (tempDataPosition == -1) {
@@ -647,6 +807,13 @@ public class Controller {
         return (roverPos * scale) * mapScale;
     }
 
+    /**
+     * Finds Y coordinate
+     *
+     * @param pos Rover position in ArrayList
+     * @param tempDataPosition Temporary rover position in ArrayList
+     * @return Y position
+     */
     private double positionFinderY(int pos, int tempDataPosition){
         double roverY;
         if (tempDataPosition == -1) {
@@ -669,6 +836,11 @@ public class Controller {
         return (roverPos * scale) * mapScale;
     }
 
+    /**
+     * Makes line trail rover has travelled
+     *
+     * @param pos Rover position in ArrayList
+     */
     public void linePath(int pos) {
         int tempDataPosition = rovers.get(pos).getDataPosition();
         anchorPane.getChildren().removeAll(lines);
@@ -679,8 +851,8 @@ public class Controller {
             double oldValueX = positionFinderX(pos, tempDataPosition);
             double oldValueY = positionFinderY(pos, tempDataPosition);
 
+            //Loops through rover data
             for (int i = 0; i < 99; i++) {
-
                 tempDataPosition--;
                 if (tempDataPosition < 0) {
                     tempDataPosition = 99;
@@ -695,7 +867,7 @@ public class Controller {
                 newValueX = positionFinderX(pos, tempDataPosition);
                 newValueY = positionFinderY(pos, tempDataPosition);
 
-                Line line = new Line(oldValueX, oldValueY, newValueX, newValueY);
+                Line line = new Line(oldValueX, oldValueY, newValueX, newValueY); //Makes new line
                 line.getStrokeDashArray().addAll(1d, 4d);
                 line.setStrokeWidth(2);
                 lines.add(line);
